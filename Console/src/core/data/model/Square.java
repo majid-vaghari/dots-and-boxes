@@ -6,48 +6,59 @@ import core.data.structure.Box;
  * Created by Majid Vaghari on 11/17/2015.
  */
 public class Square implements Box {
+    private Player owner;
+
+    private Player up;
+    private Player down;
+    private Player left;
+    private Player right;
+
+    public Square() {
+
+    }
+
     @Override
     public Player getOwner() {
-        return null;
+        return this.owner;
     }
 
     @Override
     public Player getUp() {
-        return null;
+        return this.up;
     }
 
     @Override
     public Player getDown() {
-        return null;
+        return this.down;
     }
 
     @Override
     public Player getLeft() {
-        return null;
+        return this.left;
     }
 
     @Override
     public Player getRight() {
-        return null;
-    }
-
-    @Override
-    public void setUp(Player up) {
-
-    }
-
-    @Override
-    public void setDown(Player down) {
-
-    }
-
-    @Override
-    public void setLeft(Player left) {
-
+        return this.right;
     }
 
     @Override
     public void setRight(Player right) {
+        this.right = right;
+    }
 
+    @Override
+    public void setLeft(Player left) {
+        this.left = left;
+    }
+
+    @Override
+    public void setDown(Player down) {
+        this.down = down;
+    }
+
+    @Override
+    public void setUp(Player up) {
+        this.up = up;
     }
 }

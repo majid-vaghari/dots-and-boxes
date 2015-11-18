@@ -7,6 +7,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 /**
+ * protocol will be defined and used here
+ *
  * Created by Majid Vaghari on 11/17/2015.
  */
 public class ClientCom implements Callable {

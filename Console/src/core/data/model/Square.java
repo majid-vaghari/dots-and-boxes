@@ -9,7 +9,7 @@ public class Square implements Box {
     private Player owner;
 
     private Player up;
-    private Player down;
+    private Player bottom;
     private Player left;
     private Player right;
 
@@ -23,13 +23,13 @@ public class Square implements Box {
     }
 
     @Override
-    public Player getUp() {
+    public Player getTop() {
         return this.up;
     }
 
     @Override
-    public Player getDown() {
-        return this.down;
+    public Player getBottom() {
+        return this.bottom;
     }
 
     @Override
@@ -43,22 +43,42 @@ public class Square implements Box {
     }
 
     @Override
-    public void setRight(Player right) {
-        this.right = right;
+    public boolean setTop(Player top) {
+        this.up = top;
+        if (right != null && bottom != null && left != null) {
+            this.owner = top;
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void setLeft(Player left) {
+    public boolean setBottom(Player down) {
+        this.bottom = down;
+        if (up != null && right != null && left != null) {
+            this.owner = down;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean setLeft(Player left) {
         this.left = left;
+        if (up != null && bottom != null && right != null) {
+            this.owner = left;
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void setDown(Player down) {
-        this.down = down;
-    }
-
-    @Override
-    public void setUp(Player up) {
-        this.up = up;
+    public boolean setRight(Player right) {
+        this.right = right;
+        if (up != null && bottom != null && left != null) {
+            this.owner = right;
+            return true;
+        }
+        return false;
     }
 }

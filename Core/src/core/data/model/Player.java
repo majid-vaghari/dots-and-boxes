@@ -3,12 +3,42 @@ package core.data.model;
 /**
  * Created by Majid Vaghari on 11/16/2015.
  */
-public abstract class Player {
-    private final String name;
-    private final int    id;
+public abstract class Player implements Comparable<Player> {
+    private String name;
+    private int    numOfOwnedBoxes;
 
-    public Player(final String name, final int id) {
+    public Player(String name) {
         this.name = name;
-        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public int compareTo(Player p) {
+        return this.getNumOfOwnedBoxes() - p.getNumOfOwnedBoxes();
+    }
+
+    public int getNumOfOwnedBoxes() {
+        return numOfOwnedBoxes;
+    }
+
+    public void setNumOfOwnedBoxes(int numOfOwnedBoxes) {
+        this.numOfOwnedBoxes = numOfOwnedBoxes;
     }
 }

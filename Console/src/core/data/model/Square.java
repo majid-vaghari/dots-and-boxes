@@ -3,48 +3,88 @@ package core.data.model;
 import core.data.structure.Box;
 
 /**
- * Created by Majid Vaghari on 11/17/2015.
+ * <p> This class implements the original Box class located in the data model section of the Core of the game. </p> <p>
+ * Created by Majid Vaghari on 11/17/2015. </p>
+ *
+ * @author Majid Vaghari
+ * @version 1.0.0
  */
 public class Square implements Box {
+    /**
+     * Owner of the box
+     */
     private Player owner;
 
-    private Player up;
+    /**
+     * The player who played the top line
+     */
+    private Player top;
+    /**
+     * The player who played the bottom line
+     */
     private Player bottom;
+    /**
+     * The player who played the left line
+     */
     private Player left;
+    /**
+     * The player who played the right line
+     */
     private Player right;
 
+    /**
+     * Default constructor to make instances of the box.
+     */
     public Square() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getOwner() {
         return this.owner;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getTop() {
-        return this.up;
+        return this.top;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getBottom() {
         return this.bottom;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getLeft() {
         return this.left;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Player getRight() {
         return this.right;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean setTop(Player top) {
-        this.up = top;
+        this.top = top;
         if (right != null && bottom != null && left != null) {
             this.owner = top;
             return true;
@@ -52,30 +92,39 @@ public class Square implements Box {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean setBottom(Player down) {
-        this.bottom = down;
-        if (up != null && right != null && left != null) {
-            this.owner = down;
+    public boolean setBottom(Player bottom) {
+        this.bottom = bottom;
+        if (top != null && right != null && left != null) {
+            this.owner = bottom;
             return true;
         }
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean setLeft(Player left) {
         this.left = left;
-        if (up != null && bottom != null && right != null) {
+        if (top != null && bottom != null && right != null) {
             this.owner = left;
             return true;
         }
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean setRight(Player right) {
         this.right = right;
-        if (up != null && bottom != null && left != null) {
+        if (top != null && bottom != null && left != null) {
             this.owner = right;
             return true;
         }

@@ -8,9 +8,18 @@ import core.data.model.Square;
 import java.util.Scanner;
 
 /**
- * Created by Majid Vaghari on 11/17/2015.
+ * <p> The main class is used to run the application. This part will run on console so it's simple and easy. </p> <p>
+ * Created by Majid Vaghari on 11/17/2015. </p>
+ *
+ * @author Majid Vaghari
+ * @version 1.0.0
  */
 public class Main {
+    /**
+     * The main method. runs the game.
+     *
+     * @param args command-line arguments (will have no use here)
+     */
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
@@ -64,12 +73,22 @@ public class Main {
         showPlayers(game);
     }
 
+    /**
+     * Prints the list of the players currently in the game on console
+     *
+     * @param game a reference to the game object
+     */
     private static void showPlayers(Game<Square> game) {
         int numOfPlayers = game.numOfPlayers();
         for (int i = 0; i < numOfPlayers; i++)
             System.out.println(" -> " + game.getPlayer(i) + " : " + game.numOfBoxes(game.getPlayer(i)));
     }
 
+    /**
+     * Prints the board on console
+     *
+     * @param game a reference to the game object
+     */
     private static void showBoard(Game<Square> game) {
         int size = game.boardSize();
         for (int row = 0; row < size; row++) {

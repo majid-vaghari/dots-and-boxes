@@ -1,6 +1,7 @@
 package controller;
 
 import core.Game;
+import core.InvalidMoveException;
 import core.data.model.ConsolePlayer;
 import core.data.model.Player;
 import core.data.model.Square;
@@ -59,9 +60,17 @@ public class Main {
                 break;
 
             if (command.equalsIgnoreCase("h"))
-                game.addHorizontalLine(input.nextInt(), input.nextInt());
+                try {
+                    game.addHorizontalLine(input.nextInt(), input.nextInt());
+                } catch (InvalidMoveException ignored) {
+
+                }
             else
-                game.addVerticalLine(input.nextInt(), input.nextInt());
+                try {
+                    game.addVerticalLine(input.nextInt(), input.nextInt());
+                } catch (InvalidMoveException ignored) {
+
+                }
         }
 
         System.out.println("------------------------------------------");

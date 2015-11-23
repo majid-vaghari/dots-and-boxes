@@ -14,7 +14,8 @@ import java.util.LinkedList;
  *            the design process)
  *
  * @author Majid Vaghari
- * @version 1.0.0
+ * @version 1.1.0 Invalid moves are now handled inside this class InvalidMoveException is thrown whenever an invalid
+ *          move is going to be made
  * @see Box
  */
 public class Game<B extends Box> {
@@ -97,6 +98,17 @@ public class Game<B extends Box> {
     public void playerLeave(Player player) {
         if (players.contains(player))
             players.remove(player);
+        if (numOfPlayers() < 2)
+            availableMoves = 0;
+    }
+
+    /**
+     * @return number of players currently in the game.
+     *
+     * @since version 1.0.0
+     */
+    public int numOfPlayers() {
+        return players.size();
     }
 
     /**
@@ -113,30 +125,26 @@ public class Game<B extends Box> {
     }
 
     /**
-     * @return number of players currently in the game.
-     *
-     * @since version 1.0.0
-     */
-    public int numOfPlayers() {
-        return players.size();
-    }
-
-    /**
      * Adds a vertical line to the given row and column.
      *
      * @param row row of the line to add.
      * @param col column of the line to add.
      *
+     * @throws InvalidMoveException if the selected move is invalid.
      * @since version 1.0.0
      */
-    public void addVerticalLine(int row, int col) {
-        if (getVerticalLine(row, col) == null) {
+    public void addVerticalLine(int row, int col) throws InvalidMoveException {
+        final Player verticalLine = getVerticalLine(row, col);
+        if (!isEndGame() && verticalLine == null) {
             if (!gameBoard.addVerticalLine(getCurrentPlayer(), row, col))
                 nextPlayer();
             else
                 getCurrentPlayer().setNumOfOwnedBoxes(numOfBoxes(getCurrentPlayer()));
             availableMoves--;
-        }
+        } else if (isEndGame())
+            throw new InvalidMoveException();
+        else
+            throw new InvalidMoveException(verticalLine);
     }
 
     /**
@@ -151,6 +159,15 @@ public class Game<B extends Box> {
      */
     public Player getVerticalLine(int row, int col) {
         return gameBoard.getVerticalLine(row, col);
+    }
+
+    /**
+     * @return true if the game has ended. false otherwise.
+     *
+     * @since version 1.0.0
+     */
+    public boolean isEndGame() {
+        return availableMoves <= 0;
     }
 
     /**
@@ -224,16 +241,21 @@ public class Game<B extends Box> {
      * @param row row of the desired line to place
      * @param col column of that line
      *
+     * @throws InvalidMoveException if the selected move is invalid.
      * @since version 1.0.0
      */
-    public void addHorizontalLine(int row, int col) {
-        if (getHorizontalLine(row, col) == null) {
+    public void addHorizontalLine(int row, int col) throws InvalidMoveException {
+        final Player horizontalLine = getHorizontalLine(row, col);
+        if (!isEndGame() && horizontalLine == null) {
             if (!gameBoard.addHorizontalLine(getCurrentPlayer(), row, col))
                 nextPlayer();
             else
                 getCurrentPlayer().setNumOfOwnedBoxes(numOfBoxes(getCurrentPlayer()));
             availableMoves--;
-        }
+        } else if (isEndGame())
+            throw new InvalidMoveException();
+        else
+            throw new InvalidMoveException(horizontalLine);
     }
 
     /**
@@ -258,15 +280,6 @@ public class Game<B extends Box> {
     public void sortPlayers() {
         if (isEndGame())
             players.sort(Player:: compareTo);
-    }
-
-    /**
-     * @return true if the game has ended. false otherwise.
-     *
-     * @since version 1.0.0
-     */
-    public boolean isEndGame() {
-        return availableMoves <= 0;
     }
     // write methods to handle game play
     // controller class must call and invoke methods of this class.

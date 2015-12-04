@@ -3,7 +3,7 @@ package net.server;
 import cons.Constants;
 import net.communication.InputReader;
 import net.communication.OutputWriter;
-import net.communication.Report;
+import net.data.Report;
 
 import java.io.PrintStream;
 import java.net.Socket;
@@ -12,19 +12,19 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 /**
- * protocol will be defined and used here
- * <p>
  * Created by Majid Vaghari on 11/17/2015.
  */
-public class ServerCom implements Callable<Report> {
+public class ServerCom implements Callable<Report>, AutoCloseable {
     private final ExecutorService threadPool;
     private final Socket          socket;
     private       InputReader     input;
     private       OutputWriter    output;
+    private       boolean         running;
 
     public ServerCom(ExecutorService threadPool, Socket socket) {
         this.threadPool = threadPool;
         this.socket = socket;
+        this.running = true;
     }
 
     @Override
@@ -37,6 +37,20 @@ public class ServerCom implements Callable<Report> {
 
         threadPool.submit(input);
         threadPool.submit(output);
+
+        while (running) {
+            try {
+                String message = input.getMessage();
+
+            } catch (IllegalStateException e) {
+                Thread.sleep(Constants.SENDER_WAITING_TIME);
+            }
+        }
         return null;
+    }
+
+    @Override
+    public void close() throws Exception {
+        running = false;
     }
 }

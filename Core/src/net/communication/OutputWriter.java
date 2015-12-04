@@ -11,8 +11,9 @@ import java.io.PrintStream;
  * @author Majid Vaghari
  * @version 1.0.0
  */
-public final class OutputWriter extends NetComs {
+public final class OutputWriter extends NetComs implements AutoCloseable {
     private final PrintStream stream;
+    private       boolean     running;
 
     /**
      * Used to make instances of this class
@@ -23,6 +24,7 @@ public final class OutputWriter extends NetComs {
     public OutputWriter(final PrintStream stream, final int bufferSize) {
         super(bufferSize);
         this.stream = stream;
+        this.running = true;
     }
 
     /**
@@ -46,6 +48,7 @@ public final class OutputWriter extends NetComs {
     public void close() throws Exception {
         super.close();
         stream.close();
+        running = false;
     }
 
     /**
@@ -54,14 +57,14 @@ public final class OutputWriter extends NetComs {
      */
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             try {
                 stream.println(remove());
             } catch (IllegalStateException e) {
                 try {
-                    wait(Constants.SENDER_WAITING_TIME);
-                } catch (InterruptedException e1) {
-                    // do nothing
+                    Thread.sleep(Constants.SENDER_WAITING_TIME);
+                } catch (InterruptedException ignored) {
+
                 }
             }
         }

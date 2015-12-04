@@ -1,6 +1,9 @@
 package net.communication;
 
+import net.data.Report;
+
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Callable;
 
 /**
  * <p> This abstract class is extended when we want to communicate over network. </p> <p> Two classes are expected to
@@ -11,7 +14,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * @author Majid Vaghari
  * @version 1.0.0
  */
-public abstract class NetComs implements Runnable, AutoCloseable {
+public abstract class NetComs implements Callable<Report>, AutoCloseable {
     /**
      * This is a blocking queue to buffer data sent and received by hosts.
      */

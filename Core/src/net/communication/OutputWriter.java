@@ -1,6 +1,8 @@
 package net.communication;
 
 import cons.Constants;
+import net.data.Report;
+import net.data.protocol.Protocol;
 
 import java.io.PrintStream;
 
@@ -56,10 +58,12 @@ public final class OutputWriter extends NetComs implements AutoCloseable {
      * network.
      */
     @Override
-    public void run() {
+    public Report call() {
         while (running) {
             try {
+                stream.println(Protocol.get("message-indicator.start"));
                 stream.println(remove());
+                stream.println(Protocol.get("message-indicator.end"));
             } catch (IllegalStateException e) {
                 try {
                     Thread.sleep(Constants.SENDER_WAITING_TIME);
@@ -68,5 +72,7 @@ public final class OutputWriter extends NetComs implements AutoCloseable {
                 }
             }
         }
+
+        return null;
     }
 }

@@ -12,7 +12,7 @@ public class Message {
     /**
      * the message
      */
-    private String message;
+    private final String message;
 
     /**
      * Sets the message one time only (the Message object is immutable)
@@ -31,7 +31,7 @@ public class Message {
     }
 
     /**
-     * Looks in the message and
+     * Looks in the message and returns message type.
      *
      * @return type of this message
      */
@@ -39,10 +39,25 @@ public class Message {
         return null;
     }
 
+    /**
+     * This nested enum type used to determine types of messages which are being transmitted between client and server.
+     */
     public enum MessageType {
+        /**
+         * shows that the message is sent to create a game
+         */
         CREATE_GAME,
+        /**
+         * shows that the message is sent to join a game
+         */
         JOIN_GAME,
+        /**
+         * shows that the message is sent to put a line (move)
+         */
         PUT_LINE,
+        /**
+         * sent by server to all clients to tell them the game has finished
+         */
         END_GAME
     }
 }

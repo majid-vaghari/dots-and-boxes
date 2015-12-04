@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<protocol>
+    <message-indicator>
+        <start>start</start>
+        <end>end</end>
+    </message-indicator>
+
+    <server>
+        <message-headers>
+            <message-types>
+                <handshake>CHEHLO FROM M&amp;A</handshake>
+                <create-game>message type: CREATE</create-game>
+                <join-game>message type: JOIN</join-game>
+            </message-types>
+        </message-headers>
+        <end-connection>
+            <drop-connection>
+                <newtag>dg n z bzn n s bd.</newtag>
+            </drop-connection>
+        </end-connection>
+    </server>
+    <client>
+        <message-headers>
+            <message-types>
+                <handshake>CHEHLO FROM M&amp;A</handshake>
+                <create-game>message type: CREATE</create-game>
+                <join-game>message type: JOIN</join-game>
+            </message-types>
+        </message-headers>
+        <end-connection>
+            <drop-connection>
+                <newtag>dg n z bzn n s bd.</newtag>
+            </drop-connection>
+        </end-connection>
+    </client>
+</protocol>

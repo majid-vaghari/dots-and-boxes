@@ -3,6 +3,7 @@ package net.server;
 import cons.Constants;
 import net.communication.InputReader;
 import net.communication.OutputWriter;
+import net.data.Message;
 import net.data.Report;
 
 import java.io.PrintStream;
@@ -40,7 +41,7 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
 
         while (running) {
             try {
-                String message = input.getMessage();
+                Message message = new Message(input.getMessage());
 
             } catch (IllegalStateException e) {
                 Thread.sleep(Constants.SENDER_WAITING_TIME);

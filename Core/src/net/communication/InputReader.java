@@ -1,5 +1,8 @@
 package net.communication;
 
+import net.data.Report;
+import net.data.protocol.Protocol;
+
 import java.util.Scanner;
 
 /**
@@ -10,7 +13,7 @@ import java.util.Scanner;
  * @version 1.0.0
  */
 public final class InputReader extends NetComs {
-    final private Scanner stream;
+    private final Scanner stream;
 
     /**
      * The constructor to make instances of Input reader
@@ -49,8 +52,24 @@ public final class InputReader extends NetComs {
      * runs in the background, receives the messages as they arrive and puts them in the buffer.
      */
     @Override
-    public void run() {
-        while (stream.hasNextLine())
-            add(stream.nextLine());
+    public Report call() throws IndicatorNotFoundException {
+        while (stream.hasNextLine()) {
+            String line = stream.nextLine();
+
+            if (!line.equalsIgnoreCase(Protocol.get("message-indicator.start")))
+                throw new IndicatorNotFoundException("Starting message indicator not found");
+
+            String message = "";
+            while (stream.hasNextLine() && !(line = stream.nextLine()).equalsIgnoreCase(Protocol.get
+                    ("message-indicator.end")))
+                message += line + "\n";
+
+            if (!line.equalsIgnoreCase(Protocol.get("message-indicator.end")))
+                throw new IndicatorNotFoundException("Ending message indicator not found");
+
+            add(message);
+        }
+
+        return null;
     }
 }

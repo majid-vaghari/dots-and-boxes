@@ -14,6 +14,7 @@ public class GameConfigurations {
     private boolean asyncMode;
     private int     boardSize;
     private int     numOfPlayers;
+    private String  name;
     private String  password;
 
     public boolean isFlexibleNumOfPlayers() {
@@ -54,6 +55,14 @@ public class GameConfigurations {
 
     public void setNumOfPlayers(int numOfPlayers) {
         this.numOfPlayers = numOfPlayers;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

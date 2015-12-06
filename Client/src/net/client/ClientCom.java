@@ -2,7 +2,7 @@ package net.client;
 
 import net.communication.InputReader;
 import net.communication.OutputWriter;
-import net.data.Report;
+import net.communication.data.Report;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;

@@ -1,6 +1,6 @@
 package net.communication;
 
-import net.data.Report;
+import net.communication.data.Report;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;

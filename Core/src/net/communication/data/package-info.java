@@ -6,4 +6,4 @@
  * @version 1.1.0
  * @since version 1.1.0
  */
-package net.data;
+package net.communication.data;

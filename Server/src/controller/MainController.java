@@ -5,6 +5,8 @@ import net.communication.data.DuplicateNameException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -13,9 +15,11 @@ import java.util.stream.Stream;
  */
 public class MainController {
     private static final List<GameController> GAMES;
+    private static final ExecutorService      THREAD_POOL;
 
     static {
         GAMES = new ArrayList<>();
+        THREAD_POOL = Executors.newCachedThreadPool();
     }
 
     public static void add(GameController newGame) throws DuplicateNameException {

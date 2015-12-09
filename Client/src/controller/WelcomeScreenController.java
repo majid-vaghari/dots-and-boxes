@@ -29,11 +29,12 @@ public class WelcomeScreenController implements Initializable {
 
     private static String ipRegex = makePartialIPRegex();
     @FXML
-    public TextField   username;
+    private TextField           username;
     @FXML
-    public ColorPicker color;
+    private ColorPicker         color;
     @FXML
-    public Button      connectButton;
+    private Button              connectButton;
+    private ChoiceBox<GameMode> mode;
 
     private Future<?> testConnection;
     private boolean testing = true;
@@ -47,6 +48,8 @@ public class WelcomeScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mode.getItems().addAll(GameMode.CREATE, GameMode.JOIN);
+
         connectButton.setTooltip(failureMessage);
 
         Main.submitTask((Callable<?>) () -> {
@@ -100,5 +103,21 @@ public class WelcomeScreenController implements Initializable {
         Optional<String> serverAddress = dialog.showAndWait();
         if (serverAddress.isPresent())
             Main.setServerAddress(serverAddress.get());
+    }
+
+    private enum GameMode {
+        CREATE,
+        JOIN;
+
+
+        @Override
+        public String toString() {
+            if (this == CREATE)
+                return "Create";
+            if (this == JOIN)
+                return "Join";
+
+            return "";
+        }
     }
 }

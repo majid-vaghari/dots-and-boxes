@@ -23,7 +23,7 @@ public class WelcomeScreen extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("welcome.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("statics/welcome.fxml"));
         Parent     root   = loader.load();
         Scene      scene  = new Scene(root, 400, 300);
         primaryStage.setScene(scene);

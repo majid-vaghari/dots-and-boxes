@@ -42,6 +42,18 @@
         </FlowPane>
         <FlowPane hgap="25.0" vgap="25.0">
             <children>
+                <Label text="Select:"/>
+                <ChoiceBox fx:id="mode" prefWidth="150.0"/>
+            </children>
+            <FlowPane.margin>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </FlowPane.margin>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </FlowPane>
+        <FlowPane hgap="25.0" vgap="25.0">
+            <children>
                 <HBox prefWidth="85.0"/>
                 <Button fx:id="connectButton" defaultButton="true" disable="true" mnemonicParsing="false"
                         onAction="#connect" text="Connect">

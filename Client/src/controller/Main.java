@@ -2,6 +2,7 @@ package controller;
 
 import cons.Constants;
 import javafx.stage.WindowEvent;
+import net.client.ClientCom;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -41,5 +42,13 @@ public class Main {
 
     public static void close(WindowEvent event) {
         THREAD_POOL.shutdownNow();
+    }
+
+    public static void connect() {
+
+    }
+
+    public static ClientCom getCom() {
+        return null;
     }
 }

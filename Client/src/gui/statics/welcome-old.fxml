@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+
+<?import java.net.URL?>
+<TabPane tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="gui.controllers.WelcomeController">
+    <tabs>
+        <Tab text="Welcome">
+            <content>
+                <GridPane alignment="CENTER" hgap="20" vgap="20" styleClass="welcomePane">
+                    <padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
+
+                    <children>
+
+                        <Text id="welcome"
+                            GridPane.columnIndex="0"
+                            GridPane.rowIndex="0"
+                            GridPane.columnSpan="4"
+                            GridPane.halignment="CENTER"
+                            GridPane.valignment="TOP">
+
+                            Welcome To Dots 'n Boxes
+
+                        </Text>
+   
+
+                        <Text id="nameText" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+                        Enter Your Name
+
+                        </Text>
+                        <TextField id="username" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.halignment="CENTER"/>
+
+                        <Hyperlink id="create"
+                                   GridPane.rowIndex="6"
+                                   GridPane.columnIndex="1"
+                                   GridPane.halignment="CENTER"
+                        >
+                            Create
+                        </Hyperlink>
+                        <Hyperlink id="join"
+                                   GridPane.rowIndex="6"
+                                   GridPane.columnIndex="2"
+                                   GridPane.halignment="CENTER"
+                    >
+                            Join
+                        </Hyperlink>
+
+                    </children>
+
+
+                </GridPane>
+            </content>
+        </Tab>
+
+        <Tab text="Configure Server">
+            <content>
+
+
+            </content>
+        </Tab>
+    </tabs>
+
+    <stylesheets>
+        <URL value="@styles/welcome.css" />
+    </stylesheets>
+</TabPane>

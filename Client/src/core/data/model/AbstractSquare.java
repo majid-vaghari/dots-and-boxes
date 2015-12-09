@@ -2,6 +2,7 @@ package core.data.model;
 
 import core.data.structure.Box;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 
 /**
  * <p> This class implements the original Box class located in the data model section of the Core of the game. This
@@ -12,7 +13,7 @@ import javafx.scene.Scene;
  * @version 1.2.0
  * @since version 1.2.0
  */
-public abstract class AbstractSquare extends Scene implements Box {
+public abstract class AbstractSquare extends Canvas implements Box {
     /**
      * Owner of the box
      */
@@ -38,9 +39,10 @@ public abstract class AbstractSquare extends Scene implements Box {
     /**
      * Default constructor to make instances of the box.
      */
-    public AbstractSquare() { // TODO do instantiation stuff :P
-        super(null);
+    public AbstractSquare() {//TODO implement public constructor
     }
+
+
 
     /**
      * {@inheritDoc}

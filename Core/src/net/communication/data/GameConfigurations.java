@@ -1,5 +1,7 @@
 package net.communication.data;
 
+import core.data.structure.Box;
+
 /**
  * <p> This class holds information about the game and the configurations which initiates the game. </p> <p> Created by
  * Majid Vaghari on 12/4/2015. </p>
@@ -16,6 +18,7 @@ public class GameConfigurations {
     private int     numOfPlayers;
     private String  name;
     private String  password;
+    private Box[][] boxes;
 
     public boolean isFlexibleNumOfPlayers() {
         return flexibleNumOfPlayers;
@@ -71,5 +74,13 @@ public class GameConfigurations {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Box[][] getBoxes() {
+        return boxes;
+    }
+
+    public void setBoxes(Box[][] boxes) {
+        this.boxes = boxes;
     }
 }

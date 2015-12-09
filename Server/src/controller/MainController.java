@@ -5,8 +5,10 @@ import net.communication.data.DuplicateNameException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -43,5 +45,13 @@ public class MainController {
 
     public static Stream<GameController> stream() {
         return GAMES.parallelStream();
+    }
+
+    public static <V> Future<V> submitTask(Callable<V> task) {
+        return THREAD_POOL.submit(task);
+    }
+
+    public void close() {
+        THREAD_POOL.shutdownNow();
     }
 }

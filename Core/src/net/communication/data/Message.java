@@ -38,6 +38,16 @@ public abstract class Message {
 
     /**
      * @return the message
+     *
+     * @sse getMessage
+     */
+    @Override
+    public String toString() {
+        return getMessage();
+    }
+
+    /**
+     * @return the message
      */
     public String getMessage() {
         return message;
@@ -171,6 +181,10 @@ public abstract class Message {
             super(message);
         }
 
+        public static Message newMessage() {
+            return null;
+        }
+
         /**
          * {@inheritDoc}
          */
@@ -178,6 +192,8 @@ public abstract class Message {
         public MessageType getType() {
             return MessageType.HANDSHAKE;
         }
+
+
     }
 
     /**

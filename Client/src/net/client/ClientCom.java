@@ -13,6 +13,7 @@ import net.communication.data.Report;
 
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -21,24 +22,31 @@ import java.util.concurrent.Callable;
  * Created by Majid Vaghari on 11/17/2015.
  */
 public class ClientCom implements Callable<Report>, AutoCloseable {
-    private final Socket       socket;
-    private       InputReader  input;
-    private       OutputWriter output;
+    private final    Socket                socket;
+    private volatile Game<GraphicalSquare> game;
+    private          InputReader           input;
+    private          OutputWriter          output;
     private boolean running = true;
 
     public ClientCom(final Socket socket) {
         this.socket = socket;
     }
 
-    public Game createGame(GameConfigurations config, GraphicalSquare[][] boxes) {
-        Game<GraphicalSquare> game    = new Game<>(boxes);
-        Message               message = Message.CreateGameMessage.newMessage(config);
+    public void createGame(GameConfigurations config, GraphicalSquare[][] boxes) {
+        game = new Game<>(boxes);
+        Message message = Message.CreateGameMessage.newMessage(config);
         output.sendMessage(message.toString());
-
-        return game;
     }
 
-    public Game joinGame(String name, Optional<String> password) throws GameAuthenticationException {
+    public void joinGame(String name, Optional<String> password) throws GameAuthenticationException {
+        game = null;
+    }
+
+    public Game<GraphicalSquare> getGame() {
+        return this.game;
+    }
+
+    public List<String> listGames() {
         return null;
     }
 

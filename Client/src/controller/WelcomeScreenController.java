@@ -34,6 +34,7 @@ public class WelcomeScreenController implements Initializable {
     private ColorPicker         color;
     @FXML
     private Button              connectButton;
+    @FXML
     private ChoiceBox<GameMode> mode;
 
     private Future<?> testConnection;

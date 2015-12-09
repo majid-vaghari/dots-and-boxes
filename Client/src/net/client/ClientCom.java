@@ -24,15 +24,21 @@ import java.util.concurrent.Callable;
 public class ClientCom implements Callable<Report>, AutoCloseable {
     private final    Socket                socket;
     private volatile Game<GraphicalSquare> game;
+    private volatile GameConfigurations    configurations;
     private          InputReader           input;
     private          OutputWriter          output;
-    private boolean running = true;
+    private          boolean               running;
+
+    {
+        running = true;
+    }
 
     public ClientCom(final Socket socket) {
         this.socket = socket;
     }
 
     public void createGame(GameConfigurations config, GraphicalSquare[][] boxes) {
+        this.configurations = config;
         game = new Game<>(boxes);
         Message message = Message.CreateGameMessage.newMessage(config);
         output.sendMessage(message.toString());
@@ -44,6 +50,10 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
 
     public Game<GraphicalSquare> getGame() {
         return this.game;
+    }
+
+    public GameConfigurations getConfig() {
+        return configurations;
     }
 
     public List<String> listGames() {

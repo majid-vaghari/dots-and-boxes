@@ -1,4 +1,4 @@
-package net.communication.data;
+package net.communication;
 
 /**
  * <p> This class holds information about the game and the configurations which initiates the game. </p> <p> Created by

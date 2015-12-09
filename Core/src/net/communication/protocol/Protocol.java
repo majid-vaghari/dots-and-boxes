@@ -1,4 +1,4 @@
-package net.communication.data.protocol;
+package net.communication.protocol;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

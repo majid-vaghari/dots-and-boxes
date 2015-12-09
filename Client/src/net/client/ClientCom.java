@@ -4,12 +4,7 @@ import cons.Constants;
 import controller.Main;
 import core.Game;
 import core.data.model.GraphicalSquare;
-import net.communication.GameAuthenticationException;
-import net.communication.InputReader;
-import net.communication.OutputWriter;
-import net.communication.data.GameConfigurations;
-import net.communication.data.Message;
-import net.communication.data.Report;
+import net.communication.*;
 
 import java.io.PrintStream;
 import java.net.Socket;
@@ -25,7 +20,6 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
     private final    Socket                socket;
     private volatile Game<GraphicalSquare> game;
     private volatile GameConfigurations    configurations;
-    private          InputReader           input;
     private          OutputWriter          output;
     private          boolean               running;
 
@@ -44,26 +38,28 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
         output.sendMessage(message.toString());
     }
 
-    public void joinGame(String name, Optional<String> password) throws GameAuthenticationException {
-        game = null;
+    public void joinGame(String name, String password, GraphicalSquare[][] boxes) throws GameAuthenticationException,
+                                                                                         GameNotFoundException {
+        game = new Game<>(boxes);
+        configurations = null;
     }
 
-    public Game<GraphicalSquare> getGame() {
-        return this.game;
+    public Optional<Game<GraphicalSquare>> getGame() {
+        return Optional.ofNullable(this.game);
     }
 
     public GameConfigurations getConfig() {
         return configurations;
     }
 
-    public List<String> listGames() {
+    public List<GameConfigurations> listGames() {
         return null;
     }
 
     @Override
     public Report call() throws Exception {
         // TODO connect to server and implement methods to run on server
-        input = new InputReader(
+        InputReader input = new InputReader(
                 new Scanner(socket.getInputStream()),
                 Constants.BUFFER_SIZE
         );

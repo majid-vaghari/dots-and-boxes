@@ -1,4 +1,4 @@
-package net.communication.data;
+package net.communication;
 
 import cons.Constants;
 

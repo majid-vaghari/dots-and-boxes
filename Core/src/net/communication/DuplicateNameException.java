@@ -1,4 +1,4 @@
-package net.communication.data;
+package net.communication;
 
 /**
  * This exception is thrown whenever a game is already registered on the server with given name Created by Majid Vaghari

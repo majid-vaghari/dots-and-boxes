@@ -1,6 +1,6 @@
 package controller;
 
-import net.communication.data.DuplicateNameException;
+import net.communication.DuplicateNameException;
 
 import java.util.ArrayList;
 import java.util.List;

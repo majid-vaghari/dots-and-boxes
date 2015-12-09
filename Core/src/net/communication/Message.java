@@ -1,4 +1,4 @@
-package net.communication.data;
+package net.communication;
 
 /**
  * <p> This class holds one message that is being transmitted between the server and the client.</p> <p> Created by

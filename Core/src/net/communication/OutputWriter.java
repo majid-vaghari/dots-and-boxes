@@ -1,8 +1,7 @@
 package net.communication;
 
 import cons.Constants;
-import net.communication.data.Report;
-import net.communication.data.protocol.Protocol;
+import net.communication.protocol.Protocol;
 
 import java.io.PrintStream;
 

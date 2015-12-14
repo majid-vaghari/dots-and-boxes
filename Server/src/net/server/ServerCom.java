@@ -14,8 +14,11 @@ import net.communication.data.Report;
 
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
+import java.util.stream.Collectors;
 
 /**
  * Created by Majid Vaghari on 11/17/2015.
@@ -74,10 +77,22 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
                     }
 
                     if (message.getType() == Message.MessageType.CREATE_GAME) {
+                        System.out.println("hi");
                         GameConfigurations config = ((Message.CreateGameMessage) message).getConfig();
                         game.setConfigurations(config);
                         game.setAdmin(player);
                         game.setGame(new Game<>(GraphicalSquare.class, config.getBoardSize()));
+                        MainController.add(game);
+                    }
+
+                    if (message.getType() == Message.MessageType.REQ_LIST) {
+                        List<GameConfigurations> list =
+                                MainController.stream()
+                                              .map(GameController:: getConfigurations).collect(Collectors.toList());
+                        System.out.println(list);
+                        final String mes = Message.ListGamesMessage.newMessage(list).toString();
+                        output.sendMessage(mes);
+                        System.out.println(mes);
                     }
 
                     if (message.getType() == Message.MessageType.JOIN_GAME) {
@@ -87,7 +102,7 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
                         }
                     }
 
-                } catch (IllegalStateException e) {
+                } catch (IllegalStateException | NoSuchElementException e) {
                     Thread.sleep(Constants.SENDER_WAITING_TIME);
                 }
             }

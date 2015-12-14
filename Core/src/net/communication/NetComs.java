@@ -2,6 +2,7 @@ package net.communication;
 
 import net.communication.data.Report;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Callable;
 
@@ -47,7 +48,7 @@ public abstract class NetComs implements Callable<Report>, AutoCloseable {
      *
      * @throws IllegalStateException when the buffer is empty
      */
-    protected final String remove() throws IllegalStateException {
+    protected final String remove() throws NoSuchElementException {
         return buffer.remove();
     }
 

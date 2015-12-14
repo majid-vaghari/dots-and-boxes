@@ -33,6 +33,7 @@ public class MainController {
             throw new DuplicateNameException(game.getConfigurations());
         else
             GAMES.add(newGame);
+        System.out.println("games: " + GAMES);
     }
 
     public static GameController get(String name) {

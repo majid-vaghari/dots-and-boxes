@@ -398,6 +398,7 @@ public abstract class Message {
         public Color getColor() {
             StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
             tokenizer.nextToken(); // header
+            tokenizer.nextToken(); // name
 
             double red   = Double.valueOf(tokenizer.nextToken());
             double green = Double.valueOf(tokenizer.nextToken());

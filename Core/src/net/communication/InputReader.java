@@ -3,6 +3,7 @@ package net.communication;
 import net.communication.data.Report;
 import net.communication.data.protocol.Protocol;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -33,8 +34,20 @@ public final class InputReader extends NetComs {
      *
      * @throws IllegalStateException if the buffer is empty
      */
-    public String getMessage() throws IllegalStateException {
-        return remove();
+    public String getMessage() {
+        try {
+            return remove();
+        } catch (NoSuchElementException e) {
+            try {
+                synchronized (this) {
+                    wait();
+                }
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
+
+        throw new NoSuchElementException();
     }
 
     /**
@@ -68,6 +81,9 @@ public final class InputReader extends NetComs {
                 throw new IndicatorNotFoundException("Ending message indicator not found");
 
             add(message);
+            synchronized (this) {
+                notify();
+            }
         }
 
         return null;

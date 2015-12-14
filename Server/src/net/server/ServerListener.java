@@ -24,9 +24,8 @@ public class ServerListener implements Callable, AutoCloseable {
     public Object call() throws Exception {
         ServerSocket server = new ServerSocket(Constants.PORT_NUMBER);
         while (running) {
-            try (
-                    Socket socket = server.accept()
-            ) {
+            try {
+                Socket socket = server.accept();
                 MainController.submitTask(new ServerCom(socket));
             } catch (IOException ignored) {
 

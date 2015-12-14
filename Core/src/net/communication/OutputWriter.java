@@ -1,10 +1,10 @@
 package net.communication;
 
-import cons.Constants;
 import net.communication.data.Report;
 import net.communication.data.protocol.Protocol;
 
 import java.io.PrintStream;
+import java.util.NoSuchElementException;
 
 /**
  * <p> This class is used to run in the background and send messages when needed. </p> <p> Created by Majid Vaghari on
@@ -38,6 +38,9 @@ public final class OutputWriter extends NetComs implements AutoCloseable {
      */
     public void sendMessage(final String message) throws IllegalStateException {
         add(message);
+        synchronized (this) {
+            notify();
+        }
 //        notify();
     }
 
@@ -58,23 +61,38 @@ public final class OutputWriter extends NetComs implements AutoCloseable {
      * network.
      */
     @Override
-    public Report call() {
+    public Report call() throws InterruptedException {
         while (running) {
+            String remove;
             try {
-                final String remove = remove();
-                System.out.println("WTF + " + remove);
-                stream.println(Protocol.get("message-indicator.start"));
-                System.out.println(remove);
-                stream.println(remove);
-                stream.println(Protocol.get("message-indicator.end"));
-            } catch (IllegalStateException e) {
-                try {
-                    Thread.sleep(Constants.SENDER_WAITING_TIME);
-                } catch (InterruptedException ignored) {
-
+                remove = remove();
+            } catch (NoSuchElementException e) {
+                synchronized (this) {
+                    wait();
                 }
+                remove = remove();
             }
+            stream.println(Protocol.get("message-indicator.start"));
+            stream.println(remove);
+            stream.println(Protocol.get("message-indicator.end"));
         }
+//        while (running) {
+//            try {
+//                stream.println(" hvaij");
+//                final String remove = remove();
+//                System.out.println("WTF + " + remove);
+//                stream.println(Protocol.get("message-indicator.start"));
+//                System.out.println(remove);
+//                stream.println(remove);
+//                stream.println(Protocol.get("message-indicator.end"));
+//            } catch (IllegalStateException e) {
+//                try {
+//                    Thread.sleep(Constants.SENDER_WAITING_TIME);
+//                } catch (InterruptedException ignored) {
+//
+//                }
+//            }
+//        }
 
         return null;
     }

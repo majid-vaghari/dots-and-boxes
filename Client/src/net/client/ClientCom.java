@@ -17,6 +17,7 @@ import net.communication.data.Report;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.Callable;
@@ -132,7 +133,7 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
                 }
 
                 // TODO respond to server
-            } catch (IllegalStateException e) {
+            } catch (IllegalStateException | NoSuchElementException e) {
                 Thread.sleep(Constants.SENDER_WAITING_TIME);
             }
 

@@ -19,14 +19,7 @@ import java.util.concurrent.Future;
 public class Main {
     private final static ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
     private static InetAddress serverAddress;
-
-    public static <V> Future<V> submitTask(Callable<V> task) {
-        return THREAD_POOL.submit(task);
-    }
-
-    public static <V> Future<V> submitDaemon(Callable<V> daemon) {
-        return null;
-    }
+    private static ClientCom   clientCom;
 
     public static boolean checkConnection() {
         if (serverAddress == null)
@@ -53,18 +46,23 @@ public class Main {
         THREAD_POOL.shutdownNow();
     }
 
-    public static void connect() {
+    public static void connect() throws IOException {
+        clientCom = new ClientCom(new Socket(serverAddress, Constants.PORT_NUMBER));
+        submitTask(clientCom);
+    }
 
+    public static <V> Future<V> submitTask(Callable<V> task) {
+        return THREAD_POOL.submit(task);
     }
 
     public static ClientCom getCom() {
-        return null;
-    }
-
-    public static void setGame(Game joinedGame) {
+        return clientCom;
     }
 
     public static Game getGame() {
         return null;
+    }
+
+    public static void setGame(Game joinedGame) {
     }
 }

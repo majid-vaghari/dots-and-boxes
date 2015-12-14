@@ -3,6 +3,7 @@ package controller;
 import core.Game;
 import core.data.model.GraphicalPlayer;
 import core.data.model.GraphicalSquare;
+import javafx.event.Event;
 import net.communication.data.GameConfigurations;
 
 /**
@@ -44,4 +45,6 @@ public class GameController {
     public void setAdmin(GraphicalPlayer admin) {
         this.admin = admin;
     }
+
+
 }

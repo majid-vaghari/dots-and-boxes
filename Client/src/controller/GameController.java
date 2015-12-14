@@ -70,5 +70,7 @@ public class GameController implements Initializable{
 
     }
 
-
+    public void boardClick(Event event) {
+        Main.getCom().putLine();
+    }
 }

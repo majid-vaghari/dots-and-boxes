@@ -1,6 +1,7 @@
 package controller;
 
 import cons.Constants;
+import core.Game;
 import javafx.stage.WindowEvent;
 import net.client.ClientCom;
 
@@ -57,6 +58,13 @@ public class Main {
     }
 
     public static ClientCom getCom() {
+        return null;
+    }
+
+    public static void setGame(Game joinedGame) {
+    }
+
+    public static Game getGame() {
         return null;
     }
 }

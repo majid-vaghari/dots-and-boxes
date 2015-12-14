@@ -8,7 +8,9 @@
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.text.Text?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+          prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="50.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="271.0" minWidth="10.0" prefWidth="200.0" />
@@ -24,23 +26,25 @@
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
              <Text text="Board size:" />
-            <ChoiceBox accessibleText="gg" prefWidth="150.0" value="8x8">
+            <ChoiceBox  prefWidth="150.0" value="8x8" fx:id="boardSize">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="8x8" />
                         <String fx:value="7x7" />
                         <String fx:value="6x6" />
                     </FXCollections>
                 </items>
             </ChoiceBox>
-            <Label text="Label" />
+            <Label text="Select game name:" textAlignment="CENTER" />
+            <TextField fx:id="gameName" promptText="Select a name for your game..." />
              <Text text="Game password:" />
-            <PasswordField />
+            <PasswordField fx:id="password"/>
             <Label text="Maximum number of players:" />
             <TextField />
-            <CheckBox mnemonicParsing="false" text="Flexible number of players" />
-            <CheckBox mnemonicParsing="false" text="Async mode" />
+            <CheckBox fx:id="flex" mnemonicParsing="false" text="Flexible number of players" />
+            <CheckBox fx:id="async" mnemonicParsing="false" text="Async mode" />
          </children></VBox>
-      <Button alignment="CENTER" mnemonicParsing="false" text="Play" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Button onAction="#createGame" alignment="CENTER" mnemonicParsing="false" text="Play" GridPane.columnIndex="2" GridPane.rowIndex="2" />
        
    </children>
     

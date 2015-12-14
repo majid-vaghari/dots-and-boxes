@@ -104,7 +104,6 @@ public class WelcomeScreenController implements Initializable {
             Parent root          = loader.load();
             Scene  scene         = new Scene(root, 500, 500);
             Stage  joinGameStage = new Stage();
-            joinGameStage.setOnCloseRequest(Main:: close);
             joinGameStage.setScene(scene);
             joinGameStage.setTitle("Dots and Boxes - Join Game");
             joinGameStage.show();

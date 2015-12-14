@@ -44,7 +44,7 @@
             <CheckBox fx:id="flex" mnemonicParsing="false" text="Flexible number of players" />
             <CheckBox fx:id="async" mnemonicParsing="false" text="Async mode" />
          </children></VBox>
-      <Button onAction="#createGame" alignment="CENTER" mnemonicParsing="false" text="Play" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Button fx:id="createButton" onAction="#createGame" alignment="CENTER" mnemonicParsing="false" text="Play" GridPane.columnIndex="2" GridPane.rowIndex="2" />
        
    </children>
     

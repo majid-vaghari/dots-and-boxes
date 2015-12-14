@@ -113,32 +113,37 @@ public class GraphicalSquare extends AbstractSquare {
                     Main.getCom().putLine(false, rowIndex, colIndex);
                 }
             }
-        }); //TODO: set onMouseClicked event
-
+        });
     }
 
 
 
+    
 
+
+    @Override
     public boolean setBottom(Player bottom) {
         context.setFill(((GraphicalPlayer)bottom).getColor());
         context.strokeLine(0, size, size, size);
         return super.setBottom(bottom);
     }
-    public boolean setRight(GraphicalPlayer right) {
-        context.setFill(right.getColor());
+    @Override
+    public boolean setRight(Player right) {
+        context.setFill(((GraphicalPlayer)right).getColor());
         context.strokeLine(0, size, size, size);
         return super.setBottom(right);
     }
 
-     public boolean setTop(GraphicalPlayer top) {
-        context.setFill(top.getColor());
+    @Override
+    public boolean setTop(Player top) {
+        context.setFill(((GraphicalPlayer)top).getColor());
         context.strokeLine(0, size, size, size);
         return super.setBottom(top);
     }
 
-     public boolean setLeft(GraphicalPlayer left) {
-        context.setFill(left.getColor());
+    @Override
+    public boolean setLeft(Player left) {
+        context.setFill(((GraphicalPlayer)left).getColor());
         context.strokeLine(0, size, size, size);
         return super.setBottom(left);
     }

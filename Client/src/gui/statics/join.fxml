@@ -19,7 +19,7 @@
       <ListView fx:id="gameslist"  prefHeight="400.0" prefWidth="400.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
       <Label text="Available Games" textAlignment="CENTER" textFill="#575454" textOverrun="CLIP" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
       <PasswordField fx:id="joinpass" alignment="TOP_LEFT" editable="false" promptText="Enter game password..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" onAction="#joinGame" text="Play" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+      <Button mnemonicParsing="false" fx:id="joinButton" onAction="#joinGame" text="Play" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
    </children>
 
     

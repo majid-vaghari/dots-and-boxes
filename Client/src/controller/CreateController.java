@@ -49,6 +49,7 @@ public class CreateController {
             }
         }
 
+
         Main.getCom().createGame(gc, boxes);
 
         createButton.getScene().getWindow().hide();

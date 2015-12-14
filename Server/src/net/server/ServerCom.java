@@ -54,23 +54,38 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
 
             while (this.running) {
                 try {
-                    Message message = Message.parse(input.getMessage());
+                    if (MainController.getMessage() != null) {
+                        output.sendMessage(MainController.getMessage().toString());
+                        MainController.putMessage(null);
+                    }
 
-                    if (message == null)
+                    Message message = Message.parse(input.getMessage());
+                    System.out.println("message from client: " + message);
+
+                    if (message == null) {
                         close();
+                        return null;
+                    }
 
                     if (message.getType() == Message.MessageType.HANDSHAKE) {
-
+                        player = new GraphicalPlayer(
+                                ((Message.HandshakeMessage) message).getName(),
+                                ((Message.HandshakeMessage) message).getColor()
+                        );
                     }
 
                     if (message.getType() == Message.MessageType.CREATE_GAME) {
-                        GameConfigurations config     = ((Message.CreateGameMessage) message).getConfig();
+                        GameConfigurations config = ((Message.CreateGameMessage) message).getConfig();
                         game.setConfigurations(config);
-                        game.setGame(new Game<GraphicalSquare>(GraphicalSquare.class, config.getBoardSize()));
+                        game.setAdmin(player);
+                        game.setGame(new Game<>(GraphicalSquare.class, config.getBoardSize()));
                     }
 
                     if (message.getType() == Message.MessageType.JOIN_GAME) {
-
+                        game = MainController.get(((Message.JoinGameMessage) message).getName());
+                        if (((Message.JoinGameMessage) message).authenticate(game.getConfigurations().getPassword())) {
+                            game.getGame().playerJoin(player);
+                        }
                     }
 
                 } catch (IllegalStateException e) {

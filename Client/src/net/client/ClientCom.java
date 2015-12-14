@@ -3,6 +3,7 @@ package net.client;
 import cons.Constants;
 import controller.Main;
 import core.Game;
+import core.InvalidMoveException;
 import core.data.model.GraphicalPlayer;
 import core.data.model.GraphicalSquare;
 import net.communication.GameAuthenticationException;
@@ -56,6 +57,7 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
                                                                                          GameNotFoundException {
         game = new Game<>(boxes);
         configurations = null;
+        Message.JoinGameMessage.newMessage(name, password);
     }
 
     public Optional<GameConfigurations> getConfig() {
@@ -111,16 +113,20 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
                 if (this.getGame().isPresent()) {
                     synchronized (this.getGame().get()) {
                         if (message.getType() == Message.MessageType.PUT_LINE) {
-                            if (((Message.PutLineMessage) message).isHorizontal())
-                                this.getGame().get().addHorizontalLine(
-                                        ((Message.PutLineMessage) message).getRow(),
-                                        ((Message.PutLineMessage) message).getCol()
-                                );
-                            else
-                                this.getGame().get().addVerticalLine(
-                                        ((Message.PutLineMessage) message).getRow(),
-                                        ((Message.PutLineMessage) message).getCol()
-                                );
+                            try {
+                                if (((Message.PutLineMessage) message).isHorizontal())
+                                    this.getGame().get().addHorizontalLine(
+                                            ((Message.PutLineMessage) message).getRow(),
+                                            ((Message.PutLineMessage) message).getCol()
+                                    );
+                                else
+                                    this.getGame().get().addVerticalLine(
+                                            ((Message.PutLineMessage) message).getRow(),
+                                            ((Message.PutLineMessage) message).getCol()
+                                    );
+                            } catch (InvalidMoveException ignored) {
+
+                            }
                         }
                     }
                 }

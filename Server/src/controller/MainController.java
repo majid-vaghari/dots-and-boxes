@@ -1,6 +1,7 @@
 package controller;
 
 import net.communication.DuplicateNameException;
+import net.communication.data.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.stream.Stream;
 public class MainController {
     private static final List<GameController> GAMES;
     private static final ExecutorService      THREAD_POOL;
+
+    private static Message.PutLineMessage message;
 
     static {
         GAMES = new ArrayList<>();
@@ -48,6 +51,14 @@ public class MainController {
 
     public static <V> Future<V> submitTask(Callable<V> task) {
         return THREAD_POOL.submit(task);
+    }
+
+    public static void putMessage(Message.PutLineMessage message1) {
+        message = message1;
+    }
+
+    public static Message.PutLineMessage getMessage() {
+        return message;
     }
 
     public void close() {

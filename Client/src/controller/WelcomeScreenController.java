@@ -62,15 +62,13 @@ public class WelcomeScreenController implements Initializable {
 
         connectButton.setTooltip(failureMessage);
 
-        connectButton.setDisable(false);
-
         testConnection = Main.submitTask((Callable<?>) () -> {
             while (testing) {
                 if (Main.checkConnection()) {
                     connectButton.setDisable(false);
                     connectButton.setTooltip(successMessage);
                 } else {
-//                    connectButton.setDisable(true);
+                    connectButton.setDisable(true);
                     connectButton.setTooltip(failureMessage);
                 }
 
@@ -86,7 +84,7 @@ public class WelcomeScreenController implements Initializable {
         testing = false;
         testConnection.cancel(true);
 
-        ((Stage) connectButton.getScene().getWindow()).close();
+        connectButton.getScene().getWindow().hide();
 
         FXMLLoader loader = null;
 

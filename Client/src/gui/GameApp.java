@@ -23,6 +23,5 @@ public class GameApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("statics/game.fxml"));
         Parent root = loader.load();
         GameController controller = loader.<GameController>getController();
-        controller.initData(getParameters().getNamed().get("name"), Integer.valueOf(getParameters().getNamed().get("boardsize")));
     }
 }

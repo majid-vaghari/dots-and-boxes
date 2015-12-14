@@ -22,7 +22,7 @@
        <Label GridPane.halignment="CENTER" text="Players in the game:" textFill="#6b6060" GridPane.columnIndex="1" />
        <ListView fx:id="playersList" GridPane.halignment="CENTER" prefHeight="300.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-       <Group fx:id="boxWrapper" onMouseClicked="#boardClick"/>
+       <Group fx:id="boxWrapper"/>
        
    </children>
 </GridPane>

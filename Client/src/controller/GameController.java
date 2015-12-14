@@ -38,14 +38,15 @@ public class GameController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        game = Main.getGame();
-        Optional<GameConfigurations> gc = Main.getCom().getConfig();
-        if (!gc.isPresent()){
+        Optional<Game<GraphicalSquare>> optGame = Main.getCom().getGame();
+        Optional<GameConfigurations> optConfig = Main.getCom().getConfig();
+        if (!optConfig.isPresent() || !optGame.isPresent()){
             System.err.println("No configuration is present");
             return;
             //TODO handle the exceptions
         }
-        gameConfig = gc.get();
+        gameConfig = optConfig.get();
+        game = optGame.get();
         gameName.setText(gameConfig.getName());
         playersList.setItems(FXCollections.observableArrayList());
         for (int i = 0; i < game.numOfPlayers() ; i++) {
@@ -66,11 +67,4 @@ public class GameController implements Initializable{
 
     }
 
-    public void initData(String gameName, int boardSize){
-
-    }
-
-    public void boardClick(Event event) {
-        Main.getCom().putLine();
-    }
 }

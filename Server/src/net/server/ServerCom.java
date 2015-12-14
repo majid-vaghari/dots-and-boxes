@@ -48,7 +48,6 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
                 )
         ) {
             // make instances of game and do things :D
-
             MainController.submitTask(input);
             MainController.submitTask(output);
 
@@ -62,10 +61,10 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
                     Message message = Message.parse(input.getMessage());
                     System.out.println("message from client: " + message);
 
-                    if (message == null) {
-                        close();
-                        return null;
-                    }
+//                    if (message == null) {
+//                        close();
+//                        return null;
+//                    }
 
                     if (message.getType() == Message.MessageType.HANDSHAKE) {
                         player = new GraphicalPlayer(
@@ -92,6 +91,8 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
                     Thread.sleep(Constants.SENDER_WAITING_TIME);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

@@ -26,7 +26,7 @@ import java.util.Map;
 public class Protocol {
     private static final Map<String, String> KEYWORDS = new HashMap<>();
 
-    private static final String XML_PATH  = "Core/src/net/data/protocol/protocol.xml";
+    private static final String XML_PATH  = "Core/src/net/communication/data/protocol/protocol.xml";
     private static final String ROOT_NAME = "protocol";
     private static final String DELIMITER = ".";
 

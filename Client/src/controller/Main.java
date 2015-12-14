@@ -8,6 +8,7 @@ import net.client.ClientCom;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,17 +22,24 @@ public class Main {
     private static InetAddress serverAddress;
     private static ClientCom   clientCom;
 
-    public static boolean checkConnection() {
-        if (serverAddress == null)
-            return false;
-
-        try (
-                Socket socket = new Socket(serverAddress, Constants.PORT_NUMBER)
-        ) {
-            return socket.isConnected();
-        } catch (IOException e) {
-            return false;
+    static {
+        try {
+            serverAddress = InetAddress.getByName("127.0.0.1");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
         }
+    }
+
+    public static boolean checkConnection() {
+        return serverAddress != null;
+
+        //        try (
+//                Socket socket = new Socket(serverAddress, Constants.PORT_NUMBER)
+//        ) {
+//            return socket.isConnected();
+//        } catch (IOException e) {
+//            return false;
+//        }
     }
 
     public static InetAddress getServerAddress() {

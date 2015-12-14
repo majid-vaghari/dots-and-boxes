@@ -22,9 +22,10 @@ public class ServerListener implements Callable, AutoCloseable {
 
     @Override
     public Object call() throws Exception {
+        ServerSocket server = new ServerSocket(Constants.PORT_NUMBER);
         while (running) {
             try (
-                    Socket socket = new ServerSocket(Constants.PORT_NUMBER).accept()
+                    Socket socket = server.accept()
             ) {
                 MainController.submitTask(new ServerCom(socket));
             } catch (IOException ignored) {

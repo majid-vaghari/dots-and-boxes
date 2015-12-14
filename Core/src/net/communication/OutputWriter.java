@@ -61,8 +61,11 @@ public final class OutputWriter extends NetComs implements AutoCloseable {
     public Report call() {
         while (running) {
             try {
+                final String remove = remove();
+                System.out.println("WTF + " + remove);
                 stream.println(Protocol.get("message-indicator.start"));
-                stream.println(remove());
+                System.out.println(remove);
+                stream.println(remove);
                 stream.println(Protocol.get("message-indicator.end"));
             } catch (IllegalStateException e) {
                 try {

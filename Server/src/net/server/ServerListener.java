@@ -3,6 +3,7 @@ package net.server;
 import cons.Constants;
 import controller.MainController;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Callable;
@@ -26,6 +27,8 @@ public class ServerListener implements Callable, AutoCloseable {
                     Socket socket = new ServerSocket(Constants.PORT_NUMBER).accept()
             ) {
                 MainController.submitTask(new ServerCom(socket));
+            } catch (IOException ignored) {
+
             }
         }
 

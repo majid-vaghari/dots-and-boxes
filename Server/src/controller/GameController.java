@@ -25,11 +25,23 @@ public class GameController {
         return game;
     }
 
+    public void setGame(Game<GraphicalSquare> game) {
+        this.game = game;
+    }
+
     public GameConfigurations getConfigurations() {
         return configurations;
     }
 
+    public void setConfigurations(GameConfigurations configurations) {
+        this.configurations = configurations;
+    }
+
     public GraphicalPlayer getAdmin() {
         return admin;
+    }
+
+    public void setAdmin(GraphicalPlayer admin) {
+        this.admin = admin;
     }
 }

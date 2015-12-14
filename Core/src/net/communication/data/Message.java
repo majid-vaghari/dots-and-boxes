@@ -151,6 +151,21 @@ public abstract class Message {
             return new CreateGameMessage(message);
         }
 
+        public GameConfigurations getConfig() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+            GameConfigurations config = new GameConfigurations();
+            config.setFlexibleNumOfPlayers(Boolean.valueOf(tokenizer.nextToken()));
+            config.setPasswordProtected(Boolean.valueOf(tokenizer.nextToken()));
+            config.setAsyncMode(Boolean.valueOf(tokenizer.nextToken()));
+            config.setBoardSize(Integer.valueOf(tokenizer.nextToken()));
+            config.setNumOfPlayers(Integer.valueOf(tokenizer.nextToken()));
+            config.setName(String.valueOf(tokenizer.nextToken()));
+            config.setPassword(String.valueOf(tokenizer.nextToken()));
+
+            return config;
+        }
+
         /**
          * {@inheritDoc}
          */
@@ -175,7 +190,7 @@ public abstract class Message {
 
         public static RequestListMessage newMessage() {
             String message = "";
-
+            message += Protocol.get("message-headers.message-types.request-list") + "\n";
             return new RequestListMessage(message);
         }
 
@@ -198,14 +213,46 @@ public abstract class Message {
 
         public static ListGamesMessage newMessage(List<GameConfigurations> configs) {
             String message = "";
-
+            for (GameConfigurations config : configs) {
+                message += capConf(config) + "\n";
+            }
             return new ListGamesMessage(message);
         }
 
-        public List<GameConfigurations> getList() {
-            ArrayList<GameConfigurations> list = new ArrayList<>();
+        private static String capConf(GameConfigurations config) {
+            String message = "";
+            message += config.isFlexibleNumOfPlayers() + "\t";
+            message += config.isPasswordProtected() + "\t";
+            message += config.isAsyncMode() + "\t";
+            message += config.getBoardSize() + "\t";
+            message += config.getNumOfPlayers() + "\t";
+            message += config.getName() + "\t";
+            message += config.getPassword() + "\t";
 
+            return message;
+        }
+
+        public List<GameConfigurations> getList() {
+            ArrayList<GameConfigurations> list      = new ArrayList<>();
+            StringTokenizer               tokenizer = new StringTokenizer(this.getMessage() + "\n");
+            while (tokenizer.hasMoreTokens()) {
+                list.add(getConf(tokenizer.nextToken()));
+            }
             return list;
+        }
+
+        private static GameConfigurations getConf(String cap) {
+            StringTokenizer    tokenizer = new StringTokenizer(cap, "\t");
+            GameConfigurations config    = new GameConfigurations();
+            config.setFlexibleNumOfPlayers(Boolean.valueOf(tokenizer.nextToken()));
+            config.setPasswordProtected(Boolean.valueOf(tokenizer.nextToken()));
+            config.setAsyncMode(Boolean.valueOf(tokenizer.nextToken()));
+            config.setBoardSize(Integer.valueOf(tokenizer.nextToken()));
+            config.setNumOfPlayers(Integer.valueOf(tokenizer.nextToken()));
+            config.setName(String.valueOf(tokenizer.nextToken()));
+            config.setPassword(String.valueOf(tokenizer.nextToken()));
+
+            return config;
         }
 
         @Override
@@ -225,6 +272,10 @@ public abstract class Message {
          */
         private JoinGameMessage(String message) {
             super(message);
+        }
+
+        public static JoinGameMessage newMessage() {
+
         }
 
         /**
@@ -248,6 +299,12 @@ public abstract class Message {
          */
         private PutLineMessage(String message) {
             super(message);
+        }
+
+        public static PutLineMessage newMessage(boolean horizontal, int row, int col) {
+            String message = "";
+
+            return new PutLineMessage(message);
         }
 
         /**
@@ -291,7 +348,7 @@ public abstract class Message {
     /**
      *
      */
-    public class EndGameMessage extends Message {
+    public static class EndGameMessage extends Message {
 
         /**
          * Sets the message one time only (the Message object is immutable)

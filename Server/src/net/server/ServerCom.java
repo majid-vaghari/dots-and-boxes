@@ -3,8 +3,11 @@ package net.server;
 import cons.Constants;
 import controller.GameController;
 import controller.MainController;
+import core.Game;
+import core.data.model.GraphicalSquare;
 import net.communication.InputReader;
 import net.communication.OutputWriter;
+import net.communication.data.GameConfigurations;
 import net.communication.data.Message;
 import net.communication.data.Report;
 
@@ -32,30 +35,43 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
     @Override
     public Report call() throws Exception {
         // TODO listen for a single connection
-        InputReader input = new InputReader(
-                new Scanner(socket.getInputStream()),
-                Constants.BUFFER_SIZE
-        );
-        OutputWriter output = new OutputWriter(
-                new PrintStream(socket.getOutputStream()),
-                Constants.BUFFER_SIZE
-        );
-        // make instances of game and do things :D
+        try (
+                InputReader input = new InputReader(
+                        new Scanner(socket.getInputStream()),
+                        Constants.BUFFER_SIZE
+                );
+                OutputWriter output = new OutputWriter(
+                        new PrintStream(socket.getOutputStream()),
+                        Constants.BUFFER_SIZE
+                )
+        ) {
+            // make instances of game and do things :D
 
-        MainController.submitTask(input);
-        MainController.submitTask(output);
+            MainController.submitTask(input);
+            MainController.submitTask(output);
 
-        while (this.running) {
-            try {
-                Message message = Message.parse(input.getMessage());
+            while (this.running) {
+                try {
+                    Message message = Message.parse(input.getMessage());
 
-                if (message.getType() == Message.MessageType.HANDSHAKE) {
-                    Message.HandshakeMessage handshakeMessage = ((Message.HandshakeMessage) message);
+                    if (message.getType() != Message.MessageType.HANDSHAKE) {
+                        close();
+                    }
+
+                    if (message.getType() == Message.MessageType.CREATE_GAME) {
+                        GameConfigurations config     = ((Message.CreateGameMessage) message).getConfig();
+                        GameController     controller = new GameController();
+                        controller.setConfigurations(config);
+                        controller.setGame(new Game<GraphicalSquare>(GraphicalSquare.class, config.getBoardSize()));
+                    }
+
+                    if (message.getType() == Message.MessageType.JOIN_GAME) {
+
+                    }
+
+                } catch (IllegalStateException e) {
+                    Thread.sleep(Constants.SENDER_WAITING_TIME);
                 }
-
-
-            } catch (IllegalStateException e) {
-                Thread.sleep(Constants.SENDER_WAITING_TIME);
             }
         }
         return null;
@@ -64,5 +80,7 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
     @Override
     public void close() throws Exception {
         running = false;
+        socket.close();
+
     }
 }

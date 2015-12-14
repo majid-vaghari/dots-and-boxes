@@ -75,6 +75,11 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
         return configurationsList;
     }
 
+    public void putLine(boolean horizontal, int row, int col) {
+        Message message = Message.PutLineMessage.newMessage(horizontal, row, col);
+        output.sendMessage(message.toString());
+    }
+
     @Override
     public Report call() throws Exception {
         // TODO connect to server and implement methods to run on server
@@ -117,5 +122,8 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
     @Override
     public void close() throws Exception {
         this.running = false;
+        socket.close();
+        input.close();
+        output.close();
     }
 }

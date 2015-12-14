@@ -1,6 +1,7 @@
 package net.communication;
 
-import net.communication.protocol.Protocol;
+import net.communication.data.Report;
+import net.communication.data.protocol.Protocol;
 
 import java.util.Scanner;
 

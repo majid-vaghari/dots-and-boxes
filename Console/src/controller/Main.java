@@ -62,8 +62,8 @@ public class Main {
             if (command.equalsIgnoreCase("h"))
                 try {
                     game.addHorizontalLine(input.nextInt(), input.nextInt());
-                } catch (InvalidMoveException ignored) {
-
+                } catch (InvalidMoveException e) {
+                    System.out.println(e.getMessage());
                 }
             else
                 try {

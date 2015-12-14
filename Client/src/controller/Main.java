@@ -5,6 +5,7 @@ import javafx.stage.WindowEvent;
 import net.client.ClientCom;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -16,27 +17,34 @@ import java.util.concurrent.Future;
  */
 public class Main {
     private final static ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
-    private static String serverAddress;
+    private static InetAddress serverAddress;
 
     public static <V> Future<V> submitTask(Callable<V> task) {
         return THREAD_POOL.submit(task);
     }
 
+    public static <V> Future<V> submitDaemon(Callable<V> daemon) {
+        return null;
+    }
+
     public static boolean checkConnection() {
+        if (serverAddress == null)
+            return false;
+
         try (
-                Socket test = new Socket(getServerAddress(), Constants.PORT_NUMBER)
+                Socket socket = new Socket(serverAddress, Constants.PORT_NUMBER)
         ) {
-            return true;
+            return socket.isConnected();
         } catch (IOException e) {
             return false;
         }
     }
 
-    public static String getServerAddress() {
+    public static InetAddress getServerAddress() {
         return Main.serverAddress;
     }
 
-    public static void setServerAddress(String serverAddress) {
+    public static void setServerAddress(InetAddress serverAddress) {
         Main.serverAddress = serverAddress;
     }
 

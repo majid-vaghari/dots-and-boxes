@@ -1,5 +1,7 @@
 package net.communication;
 
+import net.communication.data.GameConfigurations;
+
 /**
  * This exception is thrown whenever a game is already registered on the server with given name Created by Majid Vaghari
  * on 12/5/2015.

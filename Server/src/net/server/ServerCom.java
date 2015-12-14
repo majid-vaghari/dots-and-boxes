@@ -4,9 +4,9 @@ import cons.Constants;
 import controller.GameController;
 import controller.MainController;
 import net.communication.InputReader;
-import net.communication.Message;
 import net.communication.OutputWriter;
-import net.communication.Report;
+import net.communication.data.Message;
+import net.communication.data.Report;
 
 import java.io.PrintStream;
 import java.net.Socket;

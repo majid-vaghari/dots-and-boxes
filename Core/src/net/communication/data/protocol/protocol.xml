@@ -6,12 +6,22 @@
         <end>end</end>
     </message-indicator>
 
+    <message-headers>
+        <message-types>
+            <handshake>CHEHLO FROM M&amp;A</handshake>
+            <create-game>message type: CREATE</create-game>
+            <request-list>req list</request-list>
+            <list-games>get list</list-games>
+            <join-game>message type: JOIN</join-game>
+            <put-line>put line</put-line>
+            <end-game>end game</end-game>
+        </message-types>
+    </message-headers>
+
     <server>
         <message-headers>
             <message-types>
-                <handshake>CHEHLO FROM M&amp;A</handshake>
-                <create-game>message type: CREATE</create-game>
-                <join-game>message type: JOIN</join-game>
+
             </message-types>
         </message-headers>
         <end-connection>

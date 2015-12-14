@@ -1,7 +1,8 @@
 package net.communication;
 
 import cons.Constants;
-import net.communication.protocol.Protocol;
+import net.communication.data.Report;
+import net.communication.data.protocol.Protocol;
 
 import java.io.PrintStream;
 
@@ -37,7 +38,7 @@ public final class OutputWriter extends NetComs implements AutoCloseable {
      */
     public void sendMessage(final String message) throws IllegalStateException {
         add(message);
-        notify();
+//        notify();
     }
 
     /**

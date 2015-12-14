@@ -1,4 +1,10 @@
-package net.communication;
+package net.communication.data;
+
+import net.communication.data.protocol.Protocol;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * <p> This class holds one message that is being transmitted between the server and the client.</p> <p> Created by
@@ -31,6 +37,22 @@ public abstract class Message {
      * @return parsed message object
      */
     public static Message parse(String msg) {
+        StringTokenizer tokenizer = new StringTokenizer(msg, "\n");
+        String          header    = tokenizer.nextToken();
+        if (header.equalsIgnoreCase(Protocol.get("message-headers.message-types.handshake")))
+            return new HandshakeMessage(msg);
+        if (header.equalsIgnoreCase(Protocol.get("message-headers.message-types.create-game")))
+            return new CreateGameMessage(msg);
+        if (header.equalsIgnoreCase(Protocol.get("message-headers.message-types.request-list")))
+            return new RequestListMessage(msg);
+        if (header.equalsIgnoreCase(Protocol.get("message-headers.message-types.list-games")))
+            return new ListGamesMessage(msg);
+        if (header.equalsIgnoreCase(Protocol.get("message-headers.message-types.join-game")))
+            return new JoinGameMessage(msg);
+        if (header.equalsIgnoreCase(Protocol.get("message-headers.message-types.put-line")))
+            return new PutLineMessage(msg);
+        if (header.equalsIgnoreCase(Protocol.get("message-headers.message-types.end-game")))
+            return new EndGameMessage(msg);
         Message message = null;
         // TODO parse message and return specific message type.
         return message;
@@ -68,6 +90,14 @@ public abstract class Message {
          * shows that the message is sent to create a game
          */
         CREATE_GAME,
+        /**
+         * shows that the message is sent to request list of available games
+         */
+        REQ_LIST,
+        /**
+         * the message is sent by the server and contains list of available games
+         */
+        LIST,
         /**
          * shows that the message is sent to join a game
          */
@@ -109,6 +139,14 @@ public abstract class Message {
          */
         public static CreateGameMessage newMessage(GameConfigurations configurations) {
             String message = "";
+            message += Protocol.get("message-headers.message-types.create-game") + "\n";
+            message += configurations.isFlexibleNumOfPlayers() + "\n";
+            message += configurations.isPasswordProtected() + "\n";
+            message += configurations.isAsyncMode() + "\n";
+            message += configurations.getBoardSize() + "\n";
+            message += configurations.getNumOfPlayers() + "\n";
+            message += configurations.getName() + "\n";
+            message += configurations.getPassword() + "\n";
             // TODO build message body
             return new CreateGameMessage(message);
         }
@@ -119,6 +157,60 @@ public abstract class Message {
         @Override
         public MessageType getType() {
             return MessageType.CREATE_GAME;
+        }
+    }
+
+    /**
+     *
+     */
+    public static class RequestListMessage extends Message {
+        /**
+         * Sets the message one time only (the Message object is immutable)
+         *
+         * @param message the message to sett
+         */
+        private RequestListMessage(String message) {
+            super(message);
+        }
+
+        public static RequestListMessage newMessage() {
+            String message = "";
+
+            return new RequestListMessage(message);
+        }
+
+        @Override
+        public MessageType getType() {
+            return MessageType.REQ_LIST;
+        }
+    }
+
+    public static class ListGamesMessage extends Message {
+
+        /**
+         * Sets the message one time only (the Message object is immutable)
+         *
+         * @param message the message to sett
+         */
+        private ListGamesMessage(String message) {
+            super(message);
+        }
+
+        public static ListGamesMessage newMessage(List<GameConfigurations> configs) {
+            String message = "";
+
+            return new ListGamesMessage(message);
+        }
+
+        public List<GameConfigurations> getList() {
+            ArrayList<GameConfigurations> list = new ArrayList<>();
+
+            return list;
+        }
+
+        @Override
+        public MessageType getType() {
+            return MessageType.LIST;
         }
     }
 

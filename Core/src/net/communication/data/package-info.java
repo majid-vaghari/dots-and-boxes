@@ -6,4 +6,4 @@
  * @author Majid Vaghari
  * @version 1.0.0
  */
-package net.communication;
+package net.communication.data;

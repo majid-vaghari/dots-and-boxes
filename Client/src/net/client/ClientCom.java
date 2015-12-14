@@ -4,7 +4,13 @@ import cons.Constants;
 import controller.Main;
 import core.Game;
 import core.data.model.GraphicalSquare;
-import net.communication.*;
+import net.communication.GameAuthenticationException;
+import net.communication.GameNotFoundException;
+import net.communication.InputReader;
+import net.communication.OutputWriter;
+import net.communication.data.GameConfigurations;
+import net.communication.data.Message;
+import net.communication.data.Report;
 
 import java.io.PrintStream;
 import java.net.Socket;
@@ -17,11 +23,13 @@ import java.util.concurrent.Callable;
  * Created by Majid Vaghari on 11/17/2015.
  */
 public class ClientCom implements Callable<Report>, AutoCloseable {
-    private final    Socket                socket;
-    private volatile Game<GraphicalSquare> game;
-    private volatile GameConfigurations    configurations;
-    private          OutputWriter          output;
-    private          boolean               running;
+    private final    Socket                   socket;
+    private volatile Game<GraphicalSquare>    game;
+    private volatile GameConfigurations       configurations;
+    private volatile List<GameConfigurations> configurationsList;
+    private          OutputWriter             output;
+    private          InputReader              input;
+    private          boolean                  running;
 
     {
         running = true;
@@ -45,21 +53,32 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
     }
 
     public Optional<Game<GraphicalSquare>> getGame() {
-        return Optional.ofNullable(this.game);
+        return Optional.ofNullable(game);
     }
 
-    public GameConfigurations getConfig() {
-        return configurations;
+    public Optional<GameConfigurations> getConfig() {
+        return Optional.ofNullable(configurations);
     }
 
     public List<GameConfigurations> listGames() {
-        return null;
+        Message request = Message.RequestListMessage.newMessage();
+        output.sendMessage(request.toString());
+        try {
+            synchronized (this) {
+                wait();
+            }
+        } catch (InterruptedException ignored) {
+
+        }
+
+
+        return configurationsList;
     }
 
     @Override
     public Report call() throws Exception {
         // TODO connect to server and implement methods to run on server
-        InputReader input = new InputReader(
+        input = new InputReader(
                 new Scanner(socket.getInputStream()),
                 Constants.BUFFER_SIZE
         );
@@ -76,6 +95,13 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
         while (running) {
             try {
                 Message message = Message.parse(input.getMessage());
+
+                if (message.getType() == Message.MessageType.LIST) {
+                    this.configurationsList = ((Message.ListGamesMessage) message).getList();
+                    synchronized (this) {
+                        notify();
+                    }
+                }
 
                 // TODO respond to server
             } catch (IllegalStateException e) {

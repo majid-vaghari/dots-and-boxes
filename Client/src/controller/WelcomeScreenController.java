@@ -1,15 +1,23 @@
 package controller;
 
 import cons.Constants;
+import gui.GameApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
@@ -50,16 +58,19 @@ public class WelcomeScreenController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         mode.getItems().addAll(GameMode.CREATE, GameMode.JOIN);
+        mode.setValue(GameMode.CREATE);
 
         connectButton.setTooltip(failureMessage);
 
-        Main.submitTask((Callable<?>) () -> {
+        connectButton.setDisable(false);
+
+        testConnection = Main.submitTask((Callable<?>) () -> {
             while (testing) {
                 if (Main.checkConnection()) {
                     connectButton.setDisable(false);
                     connectButton.setTooltip(successMessage);
                 } else {
-                    connectButton.setDisable(true);
+//                    connectButton.setDisable(true);
                     connectButton.setTooltip(failureMessage);
                 }
 
@@ -71,16 +82,40 @@ public class WelcomeScreenController implements Initializable {
     }
 
     @FXML
-    public void connect(ActionEvent event) {
+    public void connect(ActionEvent event) throws IOException {
         testing = false;
         testConnection.cancel(true);
+
+        ((Stage) connectButton.getScene().getWindow()).close();
+
+        FXMLLoader loader = null;
+
+        if (mode.getValue() == GameMode.CREATE) {
+            loader = new FXMLLoader(GameApp.class.getResource("../gui/statics/create.fxml"));
+            Parent root            = loader.load();
+            Scene  scene           = new Scene(root, 500, 500);
+            Stage  createGameStage = new Stage();
+            createGameStage.setScene(scene);
+            createGameStage.setOnCloseRequest(Main:: close);
+            createGameStage.setTitle("Dots and Boxes - Create Game");
+            createGameStage.show();
+        } else if (mode.getValue() == GameMode.JOIN) {
+            loader = new FXMLLoader(GameApp.class.getResource("../gui/statics/join.fxml"));
+            Parent root          = loader.load();
+            Scene  scene         = new Scene(root, 500, 500);
+            Stage  joinGameStage = new Stage();
+            joinGameStage.setOnCloseRequest(Main:: close);
+            joinGameStage.setScene(scene);
+            joinGameStage.setTitle("Dots and Boxes - Join Game");
+            joinGameStage.show();
+        }
     }
 
     @FXML
     public void showConfig(ActionEvent event) {
-        Dialog<String> dialog      = new Dialog<>();
-        FlowPane       content     = new FlowPane(Orientation.HORIZONTAL, 10, 10);
-        TextField      ipTextField = new TextField();
+        Dialog<InetAddress> dialog      = new Dialog<>();
+        FlowPane            content     = new FlowPane(Orientation.HORIZONTAL, 10, 10);
+        TextField           ipTextField = new TextField();
         content.setPadding(new Insets(25));
         final UnaryOperator<TextFormatter.Change> ipAddressFilter = c -> {
             String text = c.getControlNewText();
@@ -91,17 +126,25 @@ public class WelcomeScreenController implements Initializable {
             }
         };
         ipTextField.setTextFormatter(new TextFormatter<>(ipAddressFilter));
+        ipTextField.setText(Main.getServerAddress() == null ? "" : Main.getServerAddress().getHostAddress());
         content.getChildren().add(new Label("Server IP:"));
         content.getChildren().add(ipTextField);
         DialogPane pane = new DialogPane();
         pane.setHeaderText("Server IP Configuration");
         pane.setContent(content);
-        pane.getButtonTypes().add(new ButtonType("Save", ButtonBar.ButtonData.APPLY));
+        pane.getButtonTypes().add(new ButtonType("Save", ButtonBar.ButtonData.FINISH));
         pane.getButtonTypes().add(new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE));
         dialog.setDialogPane(pane);
         dialog.setResultConverter(
-                buttonType -> buttonType.getButtonData().isCancelButton() ? null : ipTextField.getText());
-        Optional<String> serverAddress = dialog.showAndWait();
+                buttonType -> {
+                    try {
+                        return buttonType.getButtonData().isCancelButton()
+                               ? null : InetAddress.getByName(ipTextField.getText());
+                    } catch (UnknownHostException e) {
+                        return null;
+                    }
+                });
+        Optional<InetAddress> serverAddress = dialog.showAndWait();
         if (serverAddress.isPresent())
             Main.setServerAddress(serverAddress.get());
     }
@@ -109,7 +152,6 @@ public class WelcomeScreenController implements Initializable {
     private enum GameMode {
         CREATE,
         JOIN;
-
 
         @Override
         public String toString() {

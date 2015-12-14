@@ -12,10 +12,10 @@ import java.util.concurrent.Callable;
  * that connection and waits for another one. </p> <p> Created by Majid Vaghari on 11/17/2015. </p>
  */
 public class ServerListener implements Callable, AutoCloseable {
-    private       boolean         running;
+    private boolean running;
 
     public ServerListener() {
-        this.running = false;
+        this.running = true;
     }
 
 

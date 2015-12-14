@@ -1,6 +1,7 @@
 package controller;
 
 import cons.Constants;
+import core.data.model.GraphicalPlayer;
 import gui.GameApp;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -84,6 +85,9 @@ public class WelcomeScreenController implements Initializable {
         testing = false;
         testConnection.cancel(true);
 
+        Main.connect();
+        Main.getCom().handshake(new GraphicalPlayer(username.getText(),color.getValue(), username.getText()));
+
         connectButton.getScene().getWindow().hide();
 
         FXMLLoader loader = null;
@@ -106,6 +110,8 @@ public class WelcomeScreenController implements Initializable {
             joinGameStage.setTitle("Dots and Boxes - Join Game");
             joinGameStage.show();
         }
+
+
     }
 
     @FXML

@@ -3,6 +3,7 @@ package net.client;
 import cons.Constants;
 import controller.Main;
 import core.Game;
+import core.data.model.GraphicalPlayer;
 import core.data.model.GraphicalSquare;
 import net.communication.GameAuthenticationException;
 import net.communication.GameNotFoundException;
@@ -39,6 +40,11 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
         this.socket = socket;
     }
 
+    public void handshake(GraphicalPlayer player) {
+        Message.HandshakeMessage message = Message.HandshakeMessage.newMessage(player.getName(), player.getColor());
+        output.sendMessage(message.toString());
+    }
+
     public void createGame(GameConfigurations config, GraphicalSquare[][] boxes) {
         this.configurations = config;
         game = new Game<>(boxes);
@@ -50,10 +56,6 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
                                                                                          GameNotFoundException {
         game = new Game<>(boxes);
         configurations = null;
-    }
-
-    public Optional<Game<GraphicalSquare>> getGame() {
-        return Optional.ofNullable(game);
     }
 
     public Optional<GameConfigurations> getConfig() {
@@ -95,8 +97,6 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
         Main.submitTask(input);
         Main.submitTask(output);
 
-        output.sendMessage(Message.HandshakeMessage.newMessage().toString());
-
         while (running) {
             try {
                 Message message = Message.parse(input.getMessage());
@@ -105,6 +105,23 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
                     this.configurationsList = ((Message.ListGamesMessage) message).getList();
                     synchronized (this) {
                         notify();
+                    }
+                }
+
+                if (this.getGame().isPresent()) {
+                    synchronized (this.getGame().get()) {
+                        if (message.getType() == Message.MessageType.PUT_LINE) {
+                            if (((Message.PutLineMessage) message).isHorizontal())
+                                this.getGame().get().addHorizontalLine(
+                                        ((Message.PutLineMessage) message).getRow(),
+                                        ((Message.PutLineMessage) message).getCol()
+                                );
+                            else
+                                this.getGame().get().addVerticalLine(
+                                        ((Message.PutLineMessage) message).getRow(),
+                                        ((Message.PutLineMessage) message).getCol()
+                                );
+                        }
                     }
                 }
 
@@ -117,6 +134,10 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
         }
 
         return null;
+    }
+
+    public Optional<Game<GraphicalSquare>> getGame() {
+        return Optional.ofNullable(game);
     }
 
     @Override

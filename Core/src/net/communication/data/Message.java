@@ -1,5 +1,6 @@
 package net.communication.data;
 
+import javafx.scene.paint.Color;
 import net.communication.data.protocol.Protocol;
 
 import java.util.ArrayList;
@@ -213,6 +214,7 @@ public abstract class Message {
 
         public static ListGamesMessage newMessage(List<GameConfigurations> configs) {
             String message = "";
+            message += Protocol.get("message-headers.message-types.list-games") + "\n";
             for (GameConfigurations config : configs) {
                 message += capConf(config) + "\n";
             }
@@ -221,13 +223,13 @@ public abstract class Message {
 
         private static String capConf(GameConfigurations config) {
             String message = "";
-            message += config.isFlexibleNumOfPlayers() + "\t";
-            message += config.isPasswordProtected() + "\t";
-            message += config.isAsyncMode() + "\t";
-            message += config.getBoardSize() + "\t";
-            message += config.getNumOfPlayers() + "\t";
-            message += config.getName() + "\t";
-            message += config.getPassword() + "\t";
+            message += config.isFlexibleNumOfPlayers() + ",";
+            message += config.isPasswordProtected() + ",";
+            message += config.isAsyncMode() + ",";
+            message += config.getBoardSize() + ",";
+            message += config.getNumOfPlayers() + ",";
+            message += config.getName() + ",";
+            message += config.getPassword() + ",";
 
             return message;
         }
@@ -235,6 +237,7 @@ public abstract class Message {
         public List<GameConfigurations> getList() {
             ArrayList<GameConfigurations> list      = new ArrayList<>();
             StringTokenizer               tokenizer = new StringTokenizer(this.getMessage() + "\n");
+            tokenizer.nextToken(); // header
             while (tokenizer.hasMoreTokens()) {
                 list.add(getConf(tokenizer.nextToken()));
             }
@@ -242,7 +245,7 @@ public abstract class Message {
         }
 
         private static GameConfigurations getConf(String cap) {
-            StringTokenizer    tokenizer = new StringTokenizer(cap, "\t");
+            StringTokenizer    tokenizer = new StringTokenizer(cap, ",");
             GameConfigurations config    = new GameConfigurations();
             config.setFlexibleNumOfPlayers(Boolean.valueOf(tokenizer.nextToken()));
             config.setPasswordProtected(Boolean.valueOf(tokenizer.nextToken()));
@@ -274,8 +277,30 @@ public abstract class Message {
             super(message);
         }
 
-        public static JoinGameMessage newMessage() {
+        public static JoinGameMessage newMessage(String name, String password) {
+            String message = "";
+            message += Protocol.get("message-headers.message-types.join-game") + "\n";
+            message += name + "\n";
+            message += password + "\n";
 
+            return new JoinGameMessage(message);
+        }
+
+        public String getName() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+            return tokenizer.nextToken();
+        }
+
+        public boolean authenticate(String password) {
+            return password.equals(getPassword());
+        }
+
+        private String getPassword() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+            tokenizer.nextToken(); // name
+            return tokenizer.nextToken();
         }
 
         /**
@@ -303,8 +328,32 @@ public abstract class Message {
 
         public static PutLineMessage newMessage(boolean horizontal, int row, int col) {
             String message = "";
-
+            message += Protocol.get("message-headers.message-types.put-line") + "\n";
+            message += horizontal + "\n";
+            message += row + "\n";
+            message += col + "\n";
             return new PutLineMessage(message);
+        }
+
+        public boolean isHorizontal() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+            return Boolean.valueOf(tokenizer.nextToken());
+        }
+
+        public int getRow() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+            tokenizer.nextToken(); // horizontal
+            return Integer.valueOf(tokenizer.nextToken());
+        }
+
+        public int getCol() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+            tokenizer.nextToken(); // horizontal
+            tokenizer.nextToken(); // row
+            return Integer.valueOf(tokenizer.nextToken());
         }
 
         /**
@@ -330,8 +379,30 @@ public abstract class Message {
             super(message);
         }
 
-        public static Message newMessage() {
-            return null;
+        public static HandshakeMessage newMessage(String name, Color color) {
+            String message = "";
+            message += Protocol.get("message-headers.message-types.handshake") + "\n";
+            message += name + "\n";
+            message += color.getRed() + "\n";
+            message += color.getGreen() + "\n";
+            message += color.getBlue() + "\n";
+            return new HandshakeMessage(message);
+        }
+
+        public String getName() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+            return tokenizer.nextToken();
+        }
+
+        public Color getColor() {
+            StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
+            tokenizer.nextToken(); // header
+
+            double red   = Double.valueOf(tokenizer.nextToken());
+            double green = Double.valueOf(tokenizer.nextToken());
+            double blue  = Double.valueOf(tokenizer.nextToken());
+            return new Color(red, green, blue, 1);
         }
 
         /**
@@ -357,6 +428,12 @@ public abstract class Message {
          */
         private EndGameMessage(String message) {
             super(message);
+        }
+
+        public static EndGameMessage newMessage() {
+            String message = "";
+            message += Protocol.get("message-headers.message-types.end-game") + "\n";
+            return new EndGameMessage(message);
         }
 
         /**

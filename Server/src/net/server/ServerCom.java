@@ -4,6 +4,7 @@ import cons.Constants;
 import controller.GameController;
 import controller.MainController;
 import core.Game;
+import core.data.model.GraphicalPlayer;
 import core.data.model.GraphicalSquare;
 import net.communication.InputReader;
 import net.communication.OutputWriter;
@@ -20,9 +21,10 @@ import java.util.concurrent.Callable;
  * Created by Majid Vaghari on 11/17/2015.
  */
 public class ServerCom implements Callable<Report>, AutoCloseable {
-    private final Socket         socket;
-    private       GameController game;
-    private       boolean        running;
+    private final Socket          socket;
+    private       GameController  game;
+    private       GraphicalPlayer player;
+    private       boolean         running;
 
     {
         this.running = true;
@@ -54,15 +56,17 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
                 try {
                     Message message = Message.parse(input.getMessage());
 
-                    if (message.getType() != Message.MessageType.HANDSHAKE) {
+                    if (message == null)
                         close();
+
+                    if (message.getType() == Message.MessageType.HANDSHAKE) {
+
                     }
 
                     if (message.getType() == Message.MessageType.CREATE_GAME) {
                         GameConfigurations config     = ((Message.CreateGameMessage) message).getConfig();
-                        GameController     controller = new GameController();
-                        controller.setConfigurations(config);
-                        controller.setGame(new Game<GraphicalSquare>(GraphicalSquare.class, config.getBoardSize()));
+                        game.setConfigurations(config);
+                        game.setGame(new Game<GraphicalSquare>(GraphicalSquare.class, config.getBoardSize()));
                     }
 
                     if (message.getType() == Message.MessageType.JOIN_GAME) {

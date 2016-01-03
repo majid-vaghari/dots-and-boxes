@@ -86,7 +86,7 @@ public class WelcomeScreenController implements Initializable {
         testConnection.cancel(true);
 
         Main.connect();
-        Main.getCom().handshake(new GraphicalPlayer(username.getText(),color.getValue(), username.getText()));
+        Main.getCom().handshake(new GraphicalPlayer(username.getText(), color.getValue(), username.getText()));
 
         connectButton.getScene().getWindow().hide();
 
@@ -95,7 +95,7 @@ public class WelcomeScreenController implements Initializable {
         if (mode.getValue() == GameMode.CREATE) {
             loader = new FXMLLoader(GameApp.class.getResource("../gui/statics/create.fxml"));
             Parent root            = loader.load();
-            Scene  scene           = new Scene(root, 500, 500);
+            Scene  scene           = new Scene(root);
             Stage  createGameStage = new Stage();
             createGameStage.setScene(scene);
             createGameStage.setOnCloseRequest(Main:: close);
@@ -104,9 +104,10 @@ public class WelcomeScreenController implements Initializable {
         } else if (mode.getValue() == GameMode.JOIN) {
             loader = new FXMLLoader(GameApp.class.getResource("../gui/statics/join.fxml"));
             Parent root          = loader.load();
-            Scene  scene         = new Scene(root, 500, 500);
+            Scene  scene         = new Scene(root);
             Stage  joinGameStage = new Stage();
             joinGameStage.setScene(scene);
+            joinGameStage.setOnCloseRequest(Main:: close);
             joinGameStage.setTitle("Dots and Boxes - Join Game");
             joinGameStage.show();
         }

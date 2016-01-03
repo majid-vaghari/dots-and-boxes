@@ -1,17 +1,17 @@
 package controller;
 
 import core.data.model.GraphicalSquare;
-import gui.GameApp;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.stage.Stage;
 import net.communication.GameAuthenticationException;
 import net.communication.GameNotFoundException;
@@ -19,48 +19,60 @@ import net.communication.data.GameConfigurations;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by Amin on 12/9/2015.
+ * Created by Majid Vaghari on 12/28/2015.
  */
-public class JoinController implements Initializable{
+public class JoinController implements Initializable {
     @FXML
-    public PasswordField joinpass;
+    private ListView<GameConfigurations> gamesList;
     @FXML
-    public ListView<String> gameslist;
-    public Button joinButton;
-    List<GameConfigurations> configs = Main.getCom().listGames();
-    GameConfigurations gc;
+    private Label                        boardSize;
+    @FXML
+    private Label                        gameName;
+    @FXML
+    private Label                        maxNumOfPlayer;
+    @FXML
+    private RadioButton                  isPasswordProtected;
+    @FXML
+    private RadioButton                  isAsync;
+    @FXML
+    private PasswordField                joinPass;
 
-    public void joinGame(ActionEvent actionEvent) {
-        String gameToJoin = gameslist.getSelectionModel().getSelectedItem();
-        String passToJoin = joinpass.getText();
-        System.out.println();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        gamesList.getItems().addAll(Main.getCom().listGames());
+
+    }
+
+    public void join(ActionEvent event) {
+        GameConfigurations gc         = gamesList.getSelectionModel().getSelectedItem();
+        String             gameToJoin = gc.getName();
+        String             passToJoin = joinPass.getText();
         try {
-            gc = configs.get(gameslist.getSelectionModel().getSelectedIndex());
-            int n = gc.getBoardSize();
+            // initializing boxes
+            int                 n     = gc.getBoardSize();
             GraphicalSquare[][] boxes = new GraphicalSquare[n][n];
-
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
-                    boxes[i][j] = new GraphicalSquare(i,j);
+                    boxes[i][j] = new GraphicalSquare();
                 }
             }
 
+            Main.setBoxes(boxes);
 
-            Main.getCom().joinGame(gameToJoin, passToJoin, boxes);
-            joinButton.getScene().getWindow().hide();
+            // joining game
+            Main.getCom().joinGame(gc, passToJoin, boxes);
+            gamesList.getScene().getWindow().hide();
 
-            Parent root = FXMLLoader.load(getClass().getResource("../gui/statics/game.fxml"));
-            Scene scene = new Scene(root, 600, 600);
-            Stage stage = new Stage();
+            Parent root  = FXMLLoader.load(getClass().getResource("../gui/statics/game.fxml"));
+            Scene  scene = new Scene(root);
+            Stage  stage = new Stage();
             stage.setScene(scene);
-            stage.setOnCloseRequest(Main::close);
+            stage.setOnCloseRequest(Main:: close);
             stage.setTitle("Dots and Boxes");
             stage.show();
-
 
 
         } catch (GameAuthenticationException e) {
@@ -73,11 +85,16 @@ public class JoinController implements Initializable{
         }
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        gameslist.setItems(FXCollections.observableArrayList());
-        for (GameConfigurations config: configs) {
-            gameslist.getItems().add(config.getName());
-        }
+    public void loadConfig(Event event) {
+        GameConfigurations selectedGame = gamesList.getSelectionModel().getSelectedItem();
+
+        if (selectedGame == null)
+            return;
+
+        boardSize.setText(selectedGame.getBoardSize() + " x " + selectedGame.getBoardSize());
+        gameName.setText(selectedGame.getName());
+        maxNumOfPlayer.setText(String.valueOf(selectedGame.getNumOfPlayers()));
+        isPasswordProtected.setSelected(selectedGame.isPasswordProtected());
+        isAsync.setSelected(selectedGame.isAsyncMode());
     }
 }

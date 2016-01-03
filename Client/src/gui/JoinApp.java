@@ -20,10 +20,10 @@ public class JoinApp extends Application {
     public void start(Stage primaryStage) {
         Parent root=null;
         try {
-            root = FXMLLoader.load(getClass().getResource("statics/join.fxml"));
+            root = FXMLLoader.load(getClass().getResource("statics/joining.fxml"));
         } catch (IOException e) {}
 
-        Scene scene = new Scene(root, 500, 500);
+        Scene scene = new Scene(root);
         primaryStage.setTitle("Join Game");
         primaryStage.setScene(scene);
         primaryStage.show();

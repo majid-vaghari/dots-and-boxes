@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.Group?>
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-          minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GameController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="441.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="293.0" minWidth="10.0" prefWidth="159.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="44.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="450.0" minHeight="10.0" prefHeight="400.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="75.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Label fx:id="gameName" GridPane.halignment="CENTER" text="Game" textAlignment="CENTER" textFill="#726868" underline="true" />
-       <Label GridPane.halignment="CENTER" text="Players in the game:" textFill="#6b6060" GridPane.columnIndex="1" />
-       <ListView fx:id="playersList" GridPane.halignment="CENTER" prefHeight="300.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+<?import javafx.scene.layout.*?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="550.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/null"
+          fx:controller="controller.GameController">
+    <columnConstraints>
+        <!--<ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="441.0" />-->
+        <!--<ColumnConstraints hgrow="SOMETIMES" maxWidth="293.0" minWidth="10.0" prefWidth="159.0" />-->
+    </columnConstraints>
+    <rowConstraints>
+        <!--<RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="44.0" vgrow="SOMETIMES" />-->
+        <!--<RowConstraints maxHeight="450.0" minHeight="10.0" prefHeight="400.0" vgrow="SOMETIMES" />-->
+        <!--<RowConstraints maxHeight="75.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />-->
+    </rowConstraints>
+    <children>
+        <Label fx:id="gameName" text="Game" textAlignment="CENTER" textFill="#726868" underline="true"
+               GridPane.halignment="CENTER"/>
+        <Label text="Players in the game:" textFill="#6b6060" GridPane.columnIndex="1" GridPane.halignment="CENTER"/>
+        <ListView fx:id="playersList" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
+        <Group fx:id="boxWrapper" GridPane.rowIndex="1">
+            <GridPane.margin>
+                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+            </GridPane.margin>
+        </Group>
 
-       <Group fx:id="boxWrapper"/>
-       
-   </children>
+    </children>
 </GridPane>

@@ -33,6 +33,8 @@ public class Report {
      */
     public void add(final String message) {
         log.add(message);
+        System.out.println(message); // For debugging purposes only!
+        // TODO: remove for development.
     }
 
     /**

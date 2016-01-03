@@ -28,6 +28,7 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
     private       GameController  game;
     private       GraphicalPlayer player;
     private       boolean         running;
+    private       boolean         player1;
 
     {
         this.running = true;
@@ -40,6 +41,10 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
     @Override
     public Report call() throws Exception {
         // TODO listen for a single connection
+        Report report = new Report();
+        report.add(
+                "initializing input/output handlers."
+        );
         try (
                 InputReader input = new InputReader(
                         new Scanner(socket.getInputStream()),
@@ -54,19 +59,38 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
             MainController.submitTask(input);
             MainController.submitTask(output);
 
-            while (this.running) {
-                try {
-                    if (MainController.getMessage() != null) {
+            report.add(
+                    "I/O handlers set."
+            );
+
+
+            new Thread(() -> {
+                while (this.running) {
+                    if (MainController.getMessage() != null && MainController.getRcpt() == player1) {
                         output.sendMessage(MainController.getMessage().toString());
                         MainController.putMessage(null);
                     }
 
+                    try {
+                        Thread.sleep(Constants.SENDER_WAITING_TIME);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
+            while (this.running) {
+                try {
                     Message message = Message.parse(input.getMessage());
-                    System.out.println("message from client: " + message);
+
+                    report.add(
+                            "Message from client: " +
+                            message.getMessage()
+                    );
 
 //                    if (message == null) {
 //                        close();
-//                        return null;
+//                        return report;
 //                    }
 
                     if (message.getType() == Message.MessageType.HANDSHAKE) {
@@ -77,29 +101,65 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
                     }
 
                     if (message.getType() == Message.MessageType.CREATE_GAME) {
-                        System.out.println("hi");
                         GameConfigurations config = ((Message.CreateGameMessage) message).getConfig();
+
+                        game = new GameController();
                         game.setConfigurations(config);
                         game.setAdmin(player);
                         game.setGame(new Game<>(GraphicalSquare.class, config.getBoardSize()));
+                        game.getGame().playerJoin(game.getAdmin());
                         MainController.add(game);
+                        player1 = true;
                     }
 
                     if (message.getType() == Message.MessageType.REQ_LIST) {
                         List<GameConfigurations> list =
                                 MainController.stream()
                                               .map(GameController:: getConfigurations).collect(Collectors.toList());
-                        System.out.println(list);
                         final String mes = Message.ListGamesMessage.newMessage(list).toString();
                         output.sendMessage(mes);
-                        System.out.println(mes);
                     }
 
                     if (message.getType() == Message.MessageType.JOIN_GAME) {
                         game = MainController.get(((Message.JoinGameMessage) message).getName());
-                        if (((Message.JoinGameMessage) message).authenticate(game.getConfigurations().getPassword())) {
+
+                        for (int i = 0; i < game.getGame().numOfPlayers(); i++) {
+                            output.sendMessage(
+                                    Message.HandshakeMessage.newMessage(
+                                            game.getGame().getPlayer(i).getName(),
+                                            ((GraphicalPlayer) game.getGame().getPlayer(i)).getColor()
+                                    ).toString()
+                            );
+                        }
+
+                        if (!game.getConfigurations().isPasswordProtected() ||
+                            ((Message.JoinGameMessage) message).authenticate(game.getConfigurations().getPassword())) {
                             game.getGame().playerJoin(player);
                         }
+
+                        MainController.putMessage(
+                                Message.HandshakeMessage.newMessage(
+                                        player.getName(),
+                                        player.getColor()
+                                )
+                        );
+                        MainController.setRcpt(!player1);
+                    }
+
+                    if (message.getType() == Message.MessageType.PUT_LINE) {
+                        if (((Message.PutLineMessage) message).isHorizontal())
+                            game.getGame().addHorizontalLine(
+                                    ((Message.PutLineMessage) message).getRow(),
+                                    ((Message.PutLineMessage) message).getCol()
+                            );
+                        else
+                            game.getGame().addVerticalLine(
+                                    ((Message.PutLineMessage) message).getRow(),
+                                    ((Message.PutLineMessage) message).getCol()
+                            );
+
+                        MainController.putMessage(message);
+                        MainController.setRcpt(!player1);
                     }
 
                 } catch (IllegalStateException | NoSuchElementException e) {
@@ -109,7 +169,7 @@ public class ServerCom implements Callable<Report>, AutoCloseable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return report;
     }
 
     @Override

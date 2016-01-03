@@ -1,51 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.scene.text.Text?>
-
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-          prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CreateController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="92.0" minWidth="10.0" prefWidth="50.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="271.0" minWidth="10.0" prefWidth="200.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="50.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="132.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="348.0" minHeight="10.0" prefHeight="300.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="75.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Label text="Game Configurations" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-      <VBox prefHeight="200.0" prefWidth="100.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <children>
-             <Text text="Board size:" />
-            <ChoiceBox  prefWidth="150.0" value="8x8" fx:id="boardSize">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="8x8" />
-                        <String fx:value="7x7" />
-                        <String fx:value="6x6" />
-                    </FXCollections>
-                </items>
-            </ChoiceBox>
-            <Label text="Select game name:" textAlignment="CENTER" />
-            <TextField fx:id="gameName" promptText="Select a name for your game..." />
-             <Text text="Game password:" />
-            <PasswordField fx:id="password"/>
-            <Label text="Maximum number of players:" />
-            <TextField />
-            <CheckBox fx:id="flex" mnemonicParsing="false" text="Flexible number of players" />
-            <CheckBox fx:id="async" mnemonicParsing="false" text="Async mode" />
-         </children></VBox>
-      <Button fx:id="createButton" onAction="#createGame" alignment="CENTER" mnemonicParsing="false" text="Play" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-       
-   </children>
-    
-</GridPane>
+<FlowPane xmlns:fx="http://javafx.com/fxml/1" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity"
+          minHeight="-Infinity"
+          minWidth="-Infinity" orientation="VERTICAL" vgap="10.0" xmlns="http://javafx.com/javafx/null"
+          fx:controller="controller.CreateController">
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+    </padding>
+    <children>
+        <HBox spacing="20.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <Label text="Board Size:"/>
+                <ChoiceBox prefWidth="150.0" fx:id="boardSize"/>
+            </children>
+        </HBox>
+        <HBox layoutX="35.0" layoutY="35.0" spacing="20.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <Label text="Game Name:"/>
+                <TextField promptText="Give your game a name." fx:id="gameName"/>
+            </children>
+        </HBox>
+        <HBox layoutX="35.0" layoutY="90.0" spacing="20.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <Label text="Game Password:"/>
+                <PasswordField promptText="Set password (Optional)" fx:id="password"/>
+            </children>
+        </HBox>
+        <HBox layoutX="35.0" layoutY="145.0" spacing="20.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <Label text="Max Players:"/>
+                <Spinner fx:id="numOfPlayers"/>
+            </children>
+        </HBox>
+        <HBox layoutX="35.0" layoutY="200.0" spacing="20.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <CheckBox mnemonicParsing="false" text="People can join later" fx:id="flex"/>
+            </children>
+        </HBox>
+        <HBox layoutX="35.0" layoutY="255.0" spacing="20.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <CheckBox mnemonicParsing="false" selected="true" text="Players have turns." fx:id="turns"/>
+            </children>
+        </HBox>
+        <HBox layoutX="35.0" layoutY="302.0" spacing="20.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#createGame" text="Create"/>
+            </children>
+        </HBox>
+    </children>
+</FlowPane>

@@ -2,6 +2,7 @@ package controller;
 
 import cons.Constants;
 import core.Game;
+import core.data.model.GraphicalSquare;
 import javafx.stage.WindowEvent;
 import net.client.ClientCom;
 
@@ -19,8 +20,9 @@ import java.util.concurrent.Future;
  */
 public class Main {
     private final static ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
-    private static InetAddress serverAddress;
-    private static ClientCom   clientCom;
+    private static InetAddress         serverAddress;
+    private static ClientCom           clientCom;
+    private static GraphicalSquare[][] boxes;
 
     static {
         try {
@@ -29,6 +31,7 @@ public class Main {
             e.printStackTrace();
         }
     }
+
 
     public static boolean checkConnection() {
         return serverAddress != null;
@@ -72,5 +75,13 @@ public class Main {
     }
 
     public static void setGame(Game joinedGame) {
+    }
+
+    public static GraphicalSquare[][] getBoxes() {
+        return boxes;
+    }
+
+    public static void setBoxes(GraphicalSquare[][] boxes) {
+        Main.boxes = boxes;
     }
 }

@@ -19,8 +19,9 @@ import java.util.stream.Stream;
 public class MainController {
     private static final List<GameController> GAMES;
     private static final ExecutorService      THREAD_POOL;
+    private static       boolean              player1;
 
-    private static Message.PutLineMessage message;
+    private static Message message;
 
     static {
         GAMES = new ArrayList<>();
@@ -33,7 +34,6 @@ public class MainController {
             throw new DuplicateNameException(game.getConfigurations());
         else
             GAMES.add(newGame);
-        System.out.println("games: " + GAMES);
     }
 
     public static GameController get(String name) {
@@ -54,12 +54,20 @@ public class MainController {
         return THREAD_POOL.submit(task);
     }
 
-    public static void putMessage(Message.PutLineMessage message1) {
+    public static void putMessage(Message message1) {
         message = message1;
     }
 
-    public static Message.PutLineMessage getMessage() {
+    public static Message getMessage() {
         return message;
+    }
+
+    public static boolean getRcpt() {
+        return MainController.player1;
+    }
+
+    public static void setRcpt(boolean player1) {
+        MainController.player1 = player1;
     }
 
     public void close() {

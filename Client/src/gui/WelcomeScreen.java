@@ -26,6 +26,7 @@ public class WelcomeScreen extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("statics/welcome.fxml"));
         Parent     root   = loader.load();
         Scene      scene  = new Scene(root, 400, 300);
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Dots and Boxes - Welcome");
         primaryStage.setOnCloseRequest(Main:: close);

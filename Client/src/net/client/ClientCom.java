@@ -33,6 +33,7 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
     private          OutputWriter             output;
     private          InputReader              input;
     private          boolean                  running;
+    private          GraphicalPlayer          player;
 
     {
         running = true;
@@ -43,6 +44,7 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
     }
 
     public void handshake(GraphicalPlayer player) {
+        this.player = player;
         Message.HandshakeMessage message = Message.HandshakeMessage.newMessage(player.getName(), player.getColor());
         output.sendMessage(message.toString());
     }
@@ -51,14 +53,33 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
         this.configurations = config;
         game = new Game<>(boxes);
         Message message = Message.CreateGameMessage.newMessage(config);
+        if (getPlayer().isPresent()) {
+            game.playerJoin(getPlayer().get());
+        }
         output.sendMessage(message.toString());
     }
 
-    public void joinGame(String name, String password, GraphicalSquare[][] boxes) throws GameAuthenticationException,
-                                                                                         GameNotFoundException {
+    public Optional<GraphicalPlayer> getPlayer() {
+        return Optional.ofNullable(player);
+    }
+
+    public void joinGame(GameConfigurations configurations, String password, GraphicalSquare[][] boxes) throws
+                                                                                                        GameAuthenticationException,
+                                                                                                        GameNotFoundException {
         game = new Game<>(boxes);
-        configurations = null;
-        Message.JoinGameMessage.newMessage(name, password);
+        this.configurations = configurations;
+        output.sendMessage(Message.JoinGameMessage.newMessage(configurations.getName(), password).toString());
+
+        try {
+            synchronized (this) {
+                wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (getPlayer().isPresent())
+            game.playerJoin(getPlayer().get());
     }
 
     public Optional<GameConfigurations> getConfig() {
@@ -76,8 +97,8 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
 
         }
 
-
         return configurationsList;
+
     }
 
     public void putLine(boolean horizontal, int row, int col) {
@@ -113,6 +134,17 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
 
                 if (this.getGame().isPresent()) {
                     synchronized (this.getGame().get()) {
+                        if (message.getType() == Message.MessageType.HANDSHAKE) {
+                            GraphicalPlayer player = new GraphicalPlayer(
+                                    ((Message.HandshakeMessage) message).getName(),
+                                    ((Message.HandshakeMessage) message).getColor(),
+                                    ((Message.HandshakeMessage) message).getName()
+                            );
+                            this.getGame().get().playerJoin(player);
+                            synchronized (this) {
+                                notify();
+                            }
+                        }
                         if (message.getType() == Message.MessageType.PUT_LINE) {
                             try {
                                 if (((Message.PutLineMessage) message).isHorizontal())
@@ -136,8 +168,6 @@ public class ClientCom implements Callable<Report>, AutoCloseable {
             } catch (IllegalStateException | NoSuchElementException e) {
                 Thread.sleep(Constants.SENDER_WAITING_TIME);
             }
-
-            return null;
         }
 
         return null;

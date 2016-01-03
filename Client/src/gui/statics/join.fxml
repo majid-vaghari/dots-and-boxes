@@ -1,27 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
-<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.JoinController">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="400.0" prefWidth="200.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="200.0" prefHeight="400.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <ListView fx:id="gameslist"  prefHeight="400.0" prefWidth="400.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-      <Label text="Available Games" textAlignment="CENTER" textFill="#575454" textOverrun="CLIP" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-      <PasswordField fx:id="joinpass" alignment="TOP_LEFT" editable="false" promptText="Enter game password..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" fx:id="joinButton" onAction="#joinGame" text="Play" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-   </children>
-
-    
-
-</GridPane>
+<FlowPane xmlns:fx="http://javafx.com/fxml/1" hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity"
+          minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" vgap="10.0"
+          xmlns="http://javafx.com/javafx/null" fx:controller="controller.JoinController">
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+    </padding>
+    <children>
+        <FlowPane prefWidth="471.0">
+            <children>
+                <ListView fx:id="gamesList" onMouseClicked="#loadConfig" prefHeight="250.0">
+                    <FlowPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </FlowPane.margin>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </padding>
+                </ListView>
+                <FlowPane hgap="10.0" orientation="VERTICAL" prefHeight="276.0" vgap="10.0">
+                    <children>
+                        <Label text="Game Configurations"/>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Label text="Board Size:"/>
+                                <Label fx:id="boardSize"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </padding>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="27.0" spacing="10.0">
+                            <children>
+                                <Label text="Game Name:"/>
+                                <Label fx:id="gameName"/>
+                            </children>
+                            <FlowPane.margin>
+                                <Insets/>
+                            </FlowPane.margin>
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </padding>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="44.0" spacing="10.0">
+                            <children>
+                                <Label text="Max Players:"/>
+                                <Label fx:id="maxNumOfPlayer"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </padding>
+                        </HBox>
+                        <RadioButton fx:id="isPasswordProtected" disable="true" mnemonicParsing="false"
+                                     text="Is Password Protected?">
+                            <FlowPane.margin>
+                                <Insets/>
+                            </FlowPane.margin>
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </padding>
+                        </RadioButton>
+                        <RadioButton fx:id="isAsync" disable="true" mnemonicParsing="false" text="Is Async mode?">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </padding>
+                        </RadioButton>
+                    </children>
+                    <FlowPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </FlowPane.margin>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </padding>
+                </FlowPane>
+            </children>
+        </FlowPane>
+        <HBox>
+            <children>
+                <PasswordField fx:id="joinPass" promptText="Enter Game Password">
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </HBox.margin>
+                </PasswordField>
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#join" text="Join">
+                    <HBox.margin>
+                        <Insets bottom="10.0" left="20.0" right="10.0" top="10.0"/>
+                    </HBox.margin>
+                </Button>
+            </children>
+        </HBox>
+    </children>
+</FlowPane>

@@ -32,7 +32,7 @@ public abstract class Player implements Comparable<Player> {
      */
     @Override
     public String toString() {
-        return getName();
+        return getName() + " Score: " + getNumOfOwnedBoxes();
     }
 
     /**
@@ -52,18 +52,6 @@ public abstract class Player implements Comparable<Player> {
     }
 
     /**
-     * Compares this object to another player.
-     *
-     * @param p another player to compare with
-     *
-     * @return difference between number of owned boxes by the invoking object and p
-     */
-    @Override
-    public int compareTo(Player p) {
-        return this.getNumOfOwnedBoxes() - p.getNumOfOwnedBoxes();
-    }
-
-    /**
      * @return number of owned boxes by this player
      */
     public int getNumOfOwnedBoxes() {
@@ -75,5 +63,17 @@ public abstract class Player implements Comparable<Player> {
      */
     public void setNumOfOwnedBoxes(int numOfOwnedBoxes) {
         this.numOfOwnedBoxes = numOfOwnedBoxes;
+    }
+
+    /**
+     * Compares this object to another player.
+     *
+     * @param p another player to compare with
+     *
+     * @return difference between number of owned boxes by the invoking object and p
+     */
+    @Override
+    public int compareTo(Player p) {
+        return this.getNumOfOwnedBoxes() - p.getNumOfOwnedBoxes();
     }
 }

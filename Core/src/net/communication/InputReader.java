@@ -42,6 +42,7 @@ public final class InputReader extends NetComs {
                 synchronized (this) {
                     wait();
                 }
+                return remove();
             } catch (InterruptedException ie) {
                 ie.printStackTrace();
             }

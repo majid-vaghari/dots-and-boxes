@@ -162,7 +162,10 @@ public abstract class Message {
             config.setBoardSize(Integer.valueOf(tokenizer.nextToken()));
             config.setNumOfPlayers(Integer.valueOf(tokenizer.nextToken()));
             config.setName(String.valueOf(tokenizer.nextToken()));
-            config.setPassword(String.valueOf(tokenizer.nextToken()));
+            if (config.isPasswordProtected())
+                config.setPassword(String.valueOf(tokenizer.nextToken()));
+            else
+                config.setPassword("");
 
             return config;
         }
@@ -229,7 +232,8 @@ public abstract class Message {
             message += config.getBoardSize() + ",";
             message += config.getNumOfPlayers() + ",";
             message += config.getName() + ",";
-            message += config.getPassword() + ",";
+            if (config.isPasswordProtected())
+                message += config.getPassword();
 
             return message;
         }
@@ -237,6 +241,7 @@ public abstract class Message {
         public List<GameConfigurations> getList() {
             ArrayList<GameConfigurations> list      = new ArrayList<>();
             StringTokenizer               tokenizer = new StringTokenizer(this.getMessage() + "\n");
+            tokenizer.nextToken(); // header
             tokenizer.nextToken(); // header
             while (tokenizer.hasMoreTokens()) {
                 list.add(getConf(tokenizer.nextToken()));
@@ -253,7 +258,8 @@ public abstract class Message {
             config.setBoardSize(Integer.valueOf(tokenizer.nextToken()));
             config.setNumOfPlayers(Integer.valueOf(tokenizer.nextToken()));
             config.setName(String.valueOf(tokenizer.nextToken()));
-            config.setPassword(String.valueOf(tokenizer.nextToken()));
+            if (config.isPasswordProtected())
+                config.setPassword(String.valueOf(tokenizer.nextToken()));
 
             return config;
         }
@@ -299,7 +305,7 @@ public abstract class Message {
         private String getPassword() {
             StringTokenizer tokenizer = new StringTokenizer(this.getMessage(), "\n");
             tokenizer.nextToken(); // header
-            tokenizer.nextToken(); // name
+            String name = tokenizer.nextToken(); // name
             return tokenizer.nextToken();
         }
 

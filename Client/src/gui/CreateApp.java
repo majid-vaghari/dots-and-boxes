@@ -18,7 +18,7 @@ public class CreateApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("statics/create.fxml"));
         Parent     root   = loader.load();
-        Scene      scene  = new Scene(root, 500, 500);
+        Scene      scene  = new Scene(root);
         primaryStage.setTitle("Dots and Boxes - Create Game");
         primaryStage.setScene(scene);
 

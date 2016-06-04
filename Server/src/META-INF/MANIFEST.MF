@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: controller.Main
+Application-Name: DotsAndBoxes_Server
+Application-Description: Dots and boxes server. run this on network before running clients.

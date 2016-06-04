@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: gui.WelcomeScreen
+Application-Name: DotsAndBoxes_Client
+Application-Description: Play dots and boxes in network (client)
